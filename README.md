@@ -43,5 +43,6 @@ Convencoes completas em [`CLAUDE.md`](CLAUDE.md).
 |-------|-----------|-----------|
 | `daily-review` | produto | Fecha o dia anterior e prepara o dia atual a partir das fontes conectadas (calendario, e-mail, Slack, GitHub, Jira, transcricoes). |
 | `metric-definition` | produto | Produz a metric spec (fonte unica de verdade de uma metrica): expoe decisoes escondidas e reconcilia divergencias. |
+| `weekly-metrics-digest` | produto | Resumo semanal das metricas virado para o sinal: variacao WoW, anomalias com hipotese, guardrails, lacunas de dado. |
 
 Roadmap (nucleo a construir + backlog) em [`SKILLS-MAP.md`](SKILLS-MAP.md).
