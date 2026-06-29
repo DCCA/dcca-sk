@@ -29,6 +29,10 @@ Convencoes:
 - **Nunca** preencher config com dados reais de uma empresa - deixe placeholders entre colchetes (ver `daily-review`).
 - Comece a partir de `templates/SKILL.md`.
 
+## Evals (testar a skill)
+
+Toda skill nasce com **≥1 cenário + rubrica** em `skills/<categoria>/<skill>/evals/`, puxando da empresa fictícia `evals/empresa-ficticia/acme.md`. Para entender e rodar (aplicador + avaliador via subagentes), ver `evals/README.md`. Teste com conectores reais (nível 2) em `evals/sandbox-nivel-2.md`. Sem eval, a skill não está pronta - casa com a preferência de usar a versão com evals.
+
 ## Instalar / atualizar
 
 Depois de adicionar ou editar uma skill, rode `./install.sh` para (re)criar os symlinks em `~/.claude/skills`. Como sao symlinks, edicoes no repo valem na proxima sessao do Claude sem precisar reinstalar.
