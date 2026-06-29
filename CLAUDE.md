@@ -1,6 +1,10 @@
 # dcca-sk - Skills profissionais do Daniel
 
-Repositorio das minhas agent skills (Claude Code). Objetivo: **criar, melhorar e organizar** as skills que uso no trabalho. Sou PM (CHouseImoveis); trabalho em portugues.
+Repositorio das minhas agent skills (Claude Code). Objetivo: **criar, melhorar e organizar** as skills que uso no trabalho. Sou PM; trabalho em portugues.
+
+## Princípio: agnóstico a empresa
+
+Este repo **nao guarda configuracao final**. As skills sao montadas, otimizadas e melhoradas aqui de forma generica; tudo que e especifico de uma empresa (nomes, canais, metricas, produtos, handles) fica como **placeholder de config** dentro da propria skill. A configuracao real e preenchida no destino, quando eu importo a skill para o trabalho. Assim as skills sao portateis: se eu trocar de emprego, levo todas comigo. Nunca commitar dados reais de uma empresa neste repo.
 
 ## O que e uma skill aqui
 
@@ -22,6 +26,7 @@ Convencoes:
 - `description` em terceira pessoa, focada em QUANDO usar, com gatilhos concretos. E o campo que faz o Claude escolher a skill - capriche.
 - Uma skill = um proposito. Se esta fazendo coisas demais, quebre em duas.
 - Idioma: portugues (como as minhas skills), salvo se a skill for para compartilhar publicamente.
+- **Nunca** preencher config com dados reais de uma empresa - deixe placeholders entre colchetes (ver `daily-review`).
 - Comece a partir de `templates/SKILL.md`.
 
 ## Instalar / atualizar
