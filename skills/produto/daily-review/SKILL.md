@@ -65,6 +65,10 @@ Sintetize o que foi coletado em quatro blocos:
 
 O rastreio nos dois sentidos (3 e 4) é o núcleo da skill. Procure ativamente por commitments em e-mail, Slack e transcrições - frases como "eu te mando", "fico de", "pode deixar comigo", "te respondo até", e as recíprocas ("você consegue", "me manda", "fica de").
 
+Os blocos 3 e 4 rastreiam compromissos **em aberto**, não só os de ontem. A janela de ontem (Passo 1) escopa o que *aconteceu* (blocos 1 e 2); um compromisso que você assumiu e ainda não entregou, ou uma cobrança ainda pendente, continua vivo e deve aparecer mesmo que tenha nascido dias atrás. Não deixe um loop antigo sumir só porque caiu fora da janela.
+
+Compromisso atribuído a um grupo do qual você faz parte (ex: "o squad fica de X") conta como compromisso **seu** e entra no bloco 3, salvo se estiver claramente delegado a outra pessoa específica. Se a atribuição veio de transcrição, marque **(verificar)**.
+
 **Confiança e citação.** Para todo compromisso, registre a origem entre colchetes ao final: a fonte e a referência (ex: remetente/assunto do e-mail, canal/thread do Slack, nome da reunião). Compromissos vindos de **transcrição** entram marcados com **(verificar)**, porque a atribuição de quem falou é frágil e pode inverter a direção (você ↔ outros). Não infira prazo que não foi dito de forma explícita - se não houve prazo claro, escreva "sem prazo".
 
 ## Passo 5 - Preparar hoje
@@ -72,13 +76,14 @@ O rastreio nos dois sentidos (3 e 4) é o núcleo da skill. Procure ativamente p
 Cinco blocos:
 
 1. **Agenda** - reuniões de hoje em ordem, com horário e participantes. Faça uma análise rápida: marque reuniões coladas (sem intervalo entre uma e outra) e aponte pelo menos um bloco livre de no mínimo 90 minutos para trabalho de foco. Se o dia não tiver nenhum bloco assim, diga isso explicitamente.
-2. **Preparo por reunião** - para cada reunião que exige preparo, o que precisa estar pronto antes. Reuniões de alto peso (1:1, liderança, apresentação) têm prioridade de preparo.
+2. **Preparo por reunião** - para cada reunião que exige preparo, o que precisa estar pronto antes. Reuniões de alto peso (1:1, liderança, apresentação) têm prioridade de preparo. Só inclua uma reunião aqui se houver base concreta para o preparo (um compromisso assumido, material citado, um action item). Sem base, não invente preparo - omita a reunião deste bloco (o princípio da honestidade vence).
 3. **A responder** - inbound (e-mail ou Slack) que espera resposta sua e ainda não foi respondido. Para cada item: de quem, sobre o quê, e a fonte. Este bloco existe para que comunicação pendente não dispute vaga na lista de foco abaixo.
 4. **Prioridades** - o que carrega de ontem (itens dos blocos 3 e 4 do Passo 4) + o que é novo hoje. No máximo 3–5 itens; isto é uma lista de foco, não um backlog. Ordene por esta regra de desempate, de cima para baixo:
    1. Compromisso que VOCÊ assumiu com prazo hoje
    2. Cobrança vencida (algo que estão te devendo e já passou do prazo)
    3. Preparo de reunião de hoje
-   4. Prioridade nova que surgiu hoje
+   4. Compromisso que VOCÊ assumiu sem prazo, herdado de ontem
+   5. Prioridade nova que surgiu hoje
 
    Dentro do mesmo nível, ordene pelo horário do prazo - mais cedo primeiro. Sem horário definido, vai por último dentro do nível.
 5. **Follow-ups que vencem** - cobranças e entregas com prazo hoje ou atrasadas.
