@@ -41,4 +41,6 @@ Convencoes completas em [`CLAUDE.md`](CLAUDE.md).
 
 | Skill | Categoria | O que faz |
 |-------|-----------|-----------|
-| `daily-review` | produto | Fecha o dia anterior e prepara o dia atual a partir das fontes conectadas (calendario, e-mail, Slack, GitHub, transcricoes). |
+| `daily-review` | produto | Fecha o dia anterior e prepara o dia atual a partir das fontes conectadas (calendario, e-mail, Slack, GitHub, Jira, transcricoes). |
+
+Roadmap (nucleo a construir + backlog) em [`SKILLS-MAP.md`](SKILLS-MAP.md).
