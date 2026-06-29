@@ -11,19 +11,14 @@ Status: **feito** · **núcleo** (construir agora) · **backlog** (depois) · **
 - `daily-review` (produto) - fecha o dia anterior e prepara o atual a partir das fontes conectadas (calendário, e-mail, Slack, GitHub, Jira/rastreador, transcrições). Pessoal e interno.
 - `metric-definition` (produto) - produz a metric spec (fonte única de verdade de uma métrica): expõe decisões escondidas, reconcilia divergências, não inventa número.
 - `weekly-metrics-digest` (produto) - resumo semanal das métricas virado para o sinal: variação WoW, anomalias com hipótese, guardrails, lacunas de dado. Só a metade quantitativa.
+- `priorizacao` (produto) - fila auditável (RICE): escala calibrada antes de pontuar, premissa por nota, baixa confiança vira discovery.
+- `prd-writer` (produto) - PRD com problema e métrica de sucesso antes da solução; reconstrói pedido que chega como solução; marca o que é aberto/assumido.
+- `derive-tech-spec` (dev) - plano técnico derivado do PRD; cada decisão rastreia a um requisito; supõe o codebase com (assumido); fatia em entregas ponta a ponta.
+- `status-update` (escrita) - update BLUF com farol honesto, riscos e asks explícitos; não infla.
 
-## Núcleo essencial (construir agora)
+## Núcleo essencial - completo
 
-A espinha: **métrica -> número -> decisão -> spec -> build -> reporte**.
-
-| # | Skill | Categoria | Por que agora |
-|---|-------|-----------|---------------|
-| 1 | `priorizacao` | produto | Achismo vira decisão auditável (RICE/ICE). Uso quase contínuo, sem dependências. |
-| 2 | `prd-writer` | produto | Artefato central; força a métrica de sucesso antes da solução; alimenta o `derive-tech-spec`. |
-| 3 | `derive-tech-spec` | dev | Ponte PRD -> plano técnico na stack real. Maior alavancagem do PM que codifica. |
-| 4 | `status-update` | escrita | Progresso semanal para a liderança; reaproveita a saída do `weekly-metrics-digest`. |
-
-**Próximas (em ordem):** `priorizacao` -> `prd-writer` -> `derive-tech-spec` -> `status-update`. (`metric-definition` e `weekly-metrics-digest` já feitos.)
+As 6 skills do núcleo estão feitas, formando a espinha **métrica -> número -> decisão -> spec -> build -> reporte** (`metric-definition` -> `weekly-metrics-digest` -> `priorizacao` -> `prd-writer` -> `derive-tech-spec` -> `status-update`). Cada uma validada por eval. O que vem agora sai do **backlog** abaixo, conforme tração e necessidade.
 
 ## Backlog (depois - não some, só sai do foco)
 

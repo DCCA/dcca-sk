@@ -44,5 +44,9 @@ Convencoes completas em [`CLAUDE.md`](CLAUDE.md).
 | `daily-review` | produto | Fecha o dia anterior e prepara o dia atual a partir das fontes conectadas (calendario, e-mail, Slack, GitHub, Jira, transcricoes). |
 | `metric-definition` | produto | Produz a metric spec (fonte unica de verdade de uma metrica): expoe decisoes escondidas e reconcilia divergencias. |
 | `weekly-metrics-digest` | produto | Resumo semanal das metricas virado para o sinal: variacao WoW, anomalias com hipotese, guardrails, lacunas de dado. |
+| `priorizacao` | produto | Fila auditavel (RICE): escala calibrada, premissa por nota, baixa confianca vira discovery. |
+| `prd-writer` | produto | PRD com problema e metrica de sucesso antes da solucao; marca o que e aberto/assumido. |
+| `derive-tech-spec` | dev | Plano tecnico derivado do PRD; cada decisao rastreia a um requisito; supoe o codebase com (assumido). |
+| `status-update` | escrita | Update BLUF com farol honesto, riscos e asks explicitos; nao infla. |
 
 Roadmap (nucleo a construir + backlog) em [`SKILLS-MAP.md`](SKILLS-MAP.md).
