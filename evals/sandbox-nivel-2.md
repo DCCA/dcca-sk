@@ -1,27 +1,19 @@
-# Sandbox nível 2 (conectores reais)
+# Fidelidade além do sintético (sem precisar criar contas)
 
-Para testar skills "connector-heavy" (a `daily-review` é a principal) contra os conectores de verdade, sem usar dados reais de empresa. Ideia: ambientes de teste descartáveis, semeados com a [Acme](empresa-ficticia/acme.md). Pega o que o nível 1 não pega: auth, paginação, formato real dos dados, limites de API.
+O Nível 1 (fixtures sintéticas) já pega a maior parte dos furos de lógica - validou a `daily-review` 11/11. Quando quiser **fidelidade de conector** (nomes de tool, schemas, paginação, formato real, limites de API), há dois caminhos. **Comece sempre pelo Nível 1.**
 
-## Passos manuais (exigem suas contas/logins)
+## Nível 2a - Mock MCP (sem contas) [recomendado quando precisar de mais fidelidade]
 
-> Eu não consigo criar contas nem autorizar conectores por você. Estes passos são seus. Para comandos de login, rode via `!` na sessão; o resto é no navegador.
+Suba um servidor MCP de mentira local que serve os dados da [Acme](empresa-ficticia/acme.md) pela **mesma interface de ferramentas** que os conectores reais expõem (mesmos nomes de tool, mesmos schemas). A skill faz as chamadas de ferramenta de verdade; o mock responde com os fixtures.
 
-1. **Jira sandbox** - crie um site Atlassian Cloud grátis (separado do trabalho). Crie o projeto `PROJ` e os tickets da Acme (`PROJ-123`, `PROJ-130`, ...). Conecte o MCP do Atlassian/Jira a esse site.
-2. **Google de teste** - uma conta Google separada (NÃO a do trabalho). Popule Gmail (threads da Acme) e Calendar (rituais da Acme). Conecte os MCP de Gmail/Calendar a essa conta.
-3. **Slack de teste** - um workspace Slack grátis. Crie `#squad-core` etc. e as mensagens da Acme. Conecte o MCP do Slack.
-4. **Transcrições** - um doc no Drive de teste com a seção de action items da Acme.
+- Exercita o caminho real de tool-call (nomes, schemas, paginação simulada) sem nenhuma conta nem login.
+- Esforço: escrever o mock (Node/Python) espelhando os tools dos conectores que a skill usa.
+- É o caminho para "mais real que o sintético" sem burocracia de conta. **Posso gerar esse mock quando uma skill precisar.**
 
-## Seed (a partir da Acme)
+## Nível 2b - Sandboxes reais (com contas) [só quando o mock não bastar]
 
-Use [`empresa-ficticia/acme.md`](empresa-ficticia/acme.md) e o cenário da skill como roteiro de seed. Parte dá para automatizar - ex: Jira via API REST com um token do sandbox. **Quando você tiver o site criado, eu gero o script de seed.**
+Criar Jira/Google/Slack de teste e semear com a Acme. Pega o comportamento 100% real do provedor, mas exige criar conta, logar, semear e manter. Reserve para quando um bug só aparece no provedor real.
 
-## Como rodar
+## Recomendação
 
-Com os conectores de teste ativos, rode a skill de verdade (ex: peça "daily") e compare a saída com a **mesma rubrica** do nível 1 (`skills/.../evals/rubrica.md`).
-
-## Estado atual deste ambiente
-
-- Conectados: Google (Gmail, Calendar, Drive) - **na conta real**, não num sandbox.
-- Não conectados: Slack, Jira.
-
-Recomendação: **não** usar a conta real para teste (polui a caixa e arrisca PII). Crie os sandboxes acima.
+Nível 1 como padrão; **Nível 2a (mock MCP)** quando uma skill começar a depender do formato real dos dados; Nível 2b só em último caso. Não criar conta só para começar.
