@@ -2,6 +2,8 @@
 
 Minhas agent skills (Claude Code) - criar, melhorar e organizar as skills que uso no trabalho.
 
+O repo e **agnostico a empresa**: as skills ficam genericas, com a configuracao especifica como placeholder. A config real e preenchida so no destino, na hora de importar. Assim as skills sao portateis entre empregos.
+
 ## Estrutura
 
 ```
