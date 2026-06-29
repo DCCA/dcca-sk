@@ -9,6 +9,7 @@ Status: **feito** · **núcleo** (construir agora) · **backlog** (depois) · **
 ## Feito
 
 - `daily-review` (produto) - fecha o dia anterior e prepara o atual a partir das fontes conectadas (calendário, e-mail, Slack, GitHub, Jira/rastreador, transcrições). Pessoal e interno.
+- `metric-definition` (produto) - produz a metric spec (fonte única de verdade de uma métrica): expõe decisões escondidas, reconcilia divergências, não inventa número.
 
 ## Núcleo essencial (construir agora)
 
@@ -16,14 +17,13 @@ A espinha: **métrica -> número -> decisão -> spec -> build -> reporte**.
 
 | # | Skill | Categoria | Por que agora |
 |---|-------|-----------|---------------|
-| 1 | `metric-definition` | produto | Hub de dados: definição única de métrica. Destrava digest, experimentos e funil. Sem ela, o digest é "lixo entra, lixo sai". |
-| 2 | `weekly-metrics-digest` | produto | Número semanal (WoW, anomalias). Ritual recorrente; consome o `metric-definition`. |
-| 3 | `priorizacao` | produto | Achismo vira decisão auditável (RICE/ICE). Uso quase contínuo, sem dependências. |
-| 4 | `prd-writer` | produto | Artefato central; força a métrica de sucesso antes da solução; alimenta o `derive-tech-spec`. |
-| 5 | `derive-tech-spec` | dev | Ponte PRD -> plano técnico na stack real. Maior alavancagem do PM que codifica. |
-| 6 | `status-update` | escrita | Progresso semanal para a liderança; reaproveita a saída do `weekly-metrics-digest`. |
+| 1 | `weekly-metrics-digest` | produto | Número semanal (WoW, anomalias). Ritual recorrente; consome o `metric-definition` (já feito). |
+| 2 | `priorizacao` | produto | Achismo vira decisão auditável (RICE/ICE). Uso quase contínuo, sem dependências. |
+| 3 | `prd-writer` | produto | Artefato central; força a métrica de sucesso antes da solução; alimenta o `derive-tech-spec`. |
+| 4 | `derive-tech-spec` | dev | Ponte PRD -> plano técnico na stack real. Maior alavancagem do PM que codifica. |
+| 5 | `status-update` | escrita | Progresso semanal para a liderança; reaproveita a saída do `weekly-metrics-digest`. |
 
-**Ordem de construção:** `metric-definition` -> `weekly-metrics-digest` -> `priorizacao` -> `prd-writer` -> `derive-tech-spec` -> `status-update`.
+**Próximas (em ordem):** `weekly-metrics-digest` -> `priorizacao` -> `prd-writer` -> `derive-tech-spec` -> `status-update`. (`metric-definition` já feito.)
 
 ## Backlog (depois - não some, só sai do foco)
 
