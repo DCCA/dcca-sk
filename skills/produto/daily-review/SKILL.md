@@ -17,6 +17,7 @@ Reporte apenas o que vier de uma fonte real consultada nesta execução. Se uma 
 
 Preencher uma vez. A skill usa estes valores para escopar a coleta e cortar ruído. Se um campo estiver vazio, a skill segue sem ele, mas a precisão cai.
 
+- **Fontes ativas:** [calendário, e-mail, Slack, GitHub, Jira, transcrições - liste só as que sua empresa usa] - a skill consulta apenas estas. Adapte à sua stack (ex: Jira **ou** Linear como rastreador de issues; Teams no lugar de Slack).
 - **Handles do usuário no Slack:** [@seu.handle, apelidos] - usados para detectar menções diretas.
 - **Canais Slack prioritários (allowlist):** [#canal-do-squad, #outro] - a skill lê estes canais por completo; fora desta lista, só olha DMs, menções e threads onde você respondeu.
 - **Remetentes VIP no e-mail:** [chefe, pares-chave, clientes] - e-mails destes têm prioridade mesmo sem estrela.
@@ -33,12 +34,13 @@ Nunca assuma a data - sempre derive da ferramenta.
 
 ## Passo 2 - Descobrir quais fontes existem
 
-Verifique quais ferramentas/conectores estão disponíveis no ambiente. As fontes-alvo são:
+Considere apenas as **Fontes ativas** da config e verifique quais delas estão de fato conectadas no ambiente. As fontes possíveis são:
 
 - **Calendário** - reuniões de ontem (o que aconteceu) e de hoje (o que preparar).
 - **E-mail** - threads recebidas/enviadas na janela de ontem; pedidos em aberto.
-- **Slack** - menções, DMs e threads onde o usuário foi citado ou respondeu.
-- **GitHub** - PRs, issues, reviews e commits na janela.
+- **Slack** (ou equivalente: Teams, Discord) - menções, DMs e threads onde o usuário foi citado ou respondeu.
+- **GitHub (código/PRs)** - PRs, reviews e commits na janela.
+- **Rastreador de issues / gestão de projeto** (Jira, Linear, GitHub Issues...) - tickets atribuídos ao usuário, mudanças de status, blockers e estado do board/sprint.
 - **Transcrições de reunião** - decisões e action items das reuniões de ontem.
 
 Para cada fonte que **não** estiver conectada, registre numa lista "Fontes não consultadas" e siga em frente. Não trave a execução por causa de uma fonte ausente.
@@ -51,19 +53,22 @@ De cada fonte disponível, extraia somente o que serve aos dois objetivos. Não 
 - **Calendário (hoje):** horário, participantes, e o que o usuário precisa levar pronto. Mesmos filtros de ruído. Sinalize reuniões de alto peso (1:1, reunião com liderança, apresentação, decisão).
 - **E-mail:** quem pediu o quê, e o que o usuário prometeu responder. Descarte promoções, newsletters e notificações automáticas (categoria de promoções; remetentes de serviço como redes sociais, lojas, cobranças automáticas). Dê peso a e-mails marcados como importante ou com estrela, e a qualquer e-mail de um **remetente VIP** da config.
 - **Slack:** escope pela config. Sempre olhe: DMs do usuário, menções diretas aos **handles** da config, e threads onde o usuário respondeu. Leia por completo apenas os **canais prioritários** da allowlist. Não varra outros canais. Extraia pedidos diretos, perguntas não respondidas e decisões em thread.
-- **GitHub:** o que avançou, o que está parado esperando o usuário, o que espera outra pessoa. Foque em PRs e issues atribuídos ao usuário ou aguardando review dele.
+- **GitHub (código/PRs):** o que avançou, o que está parado esperando o usuário, o que espera outra pessoa. Foque em PRs atribuídos ao usuário ou aguardando review dele.
+- **Rastreador de issues (Jira/Linear/...):** o que avançou, mudou de status ou travou. Foque em tickets atribuídos ao usuário, blockers, e comentários/menções te endereçando. Um comentário ou pedido não vira compromisso seu até você aceitar (ver Passo 4); capte o sinal de andamento e o que exige sua ação. Não despeje o board inteiro.
 - **Transcrições (ex: Gemini):** prefira a seção de resumo / action items do documento gerado, não o transcript cru - é mais limpa e já vem atribuída. Normalize nomes e termos contra o glossário da config. Atenção: a atribuição de quem falou é frágil, então todo compromisso extraído daqui é provisório (ver Passo 4). Se você não foi o organizador da reunião, o documento pode estar no Drive de outra pessoa e não estar acessível - nesse caso, registre a reunião como "transcrição não acessível" em vez de inferir o conteúdo.
 
 ## Passo 4 - Reconstruir ontem
 
 Sintetize o que foi coletado em quatro blocos:
 
-1. **Aconteceu** - reuniões e eventos relevantes, em uma linha cada.
+1. **Aconteceu** - reuniões e eventos relevantes (incluindo mudanças de status de tickets do rastreador, ex: entrou em review, ficou blocked), em uma linha cada.
 2. **Concluído** - o que efetivamente fechou.
 3. **Compromissos que VOCÊ assumiu** - para cada um: o quê, para quem, prazo (se houver). Isto é o que pode cair se você esquecer.
 4. **Esperando de outros** - compromissos que terceiros assumiram com você e ainda não entregaram. Isto é o que você precisa cobrar.
 
 O rastreio nos dois sentidos (3 e 4) é o núcleo da skill. Procure ativamente por commitments em e-mail, Slack e transcrições - frases como "eu te mando", "fico de", "pode deixar comigo", "te respondo até", e as recíprocas ("você consegue", "me manda", "fica de").
+
+Atenção à direção do pedido: uma solicitação que chegou para você e que você **ainda não aceitou** não é compromisso seu - vai para "A responder" (Passo 5, bloco 3), não para o bloco 3 daqui. Só conte como "Você assumiu" quando houver aceite explícito ("pode deixar", "fico de", "te mando").
 
 Os blocos 3 e 4 rastreiam compromissos **em aberto**, não só os de ontem. A janela de ontem (Passo 1) escopa o que *aconteceu* (blocos 1 e 2); um compromisso que você assumiu e ainda não entregou, ou uma cobrança ainda pendente, continua vivo e deve aparecer mesmo que tenha nascido dias atrás. Não deixe um loop antigo sumir só porque caiu fora da janela.
 
@@ -77,13 +82,14 @@ Cinco blocos:
 
 1. **Agenda** - reuniões de hoje em ordem, com horário e participantes. Faça uma análise rápida: marque reuniões coladas (sem intervalo entre uma e outra) e aponte pelo menos um bloco livre de no mínimo 90 minutos para trabalho de foco. Se o dia não tiver nenhum bloco assim, diga isso explicitamente.
 2. **Preparo por reunião** - para cada reunião que exige preparo, o que precisa estar pronto antes. Reuniões de alto peso (1:1, liderança, apresentação) têm prioridade de preparo. Só inclua uma reunião aqui se houver base concreta para o preparo (um compromisso assumido, material citado, um action item). Sem base, não invente preparo - omita a reunião deste bloco (o princípio da honestidade vence).
-3. **A responder** - inbound (e-mail ou Slack) que espera resposta sua e ainda não foi respondido. Para cada item: de quem, sobre o quê, e a fonte. Este bloco existe para que comunicação pendente não dispute vaga na lista de foco abaixo.
+3. **A responder** - inbound (e-mail, Slack ou rastreador de issues) que espera resposta/decisão sua e ainda não foi respondido. Inclui o caso de maior impacto: **outra pessoa parada esperando uma decisão sua** (ex: um ticket blocked aguardando seu input). Para cada item: de quem, sobre o quê, e a fonte. Este bloco existe para que comunicação pendente não dispute vaga na lista de foco abaixo.
 4. **Prioridades** - o que carrega de ontem (itens dos blocos 3 e 4 do Passo 4) + o que é novo hoje. No máximo 3–5 itens; isto é uma lista de foco, não um backlog. Ordene por esta regra de desempate, de cima para baixo:
    1. Compromisso que VOCÊ assumiu com prazo hoje
-   2. Cobrança vencida (algo que estão te devendo e já passou do prazo)
-   3. Preparo de reunião de hoje
-   4. Compromisso que VOCÊ assumiu sem prazo, herdado de ontem
-   5. Prioridade nova que surgiu hoje
+   2. Decisão ou ação sua que está travando outra pessoa (desbloqueio)
+   3. Cobrança vencida (algo que estão te devendo e já passou do prazo)
+   4. Preparo de reunião de hoje
+   5. Compromisso que VOCÊ assumiu sem prazo, herdado de ontem
+   6. Prioridade nova que surgiu hoje
 
    Dentro do mesmo nível, ordene pelo horário do prazo - mais cedo primeiro. Sem horário definido, vai por último dentro do nível.
 5. **Follow-ups que vencem** - cobranças e entregas com prazo hoje ou atrasadas.
