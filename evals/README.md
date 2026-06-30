@@ -17,6 +17,7 @@ Isso é o loop do `writing-skills` (TDD para skills): rodar -> ver onde falha ->
 2. **Avaliador** - dispare outro subagente:
    > "Aqui está a rubrica e a saída produzida. Para cada invariante da rubrica, responda PASS/FAIL com evidência. Liste qualquer dado inventado (alucinação) e qualquer furo." (cole rubrica + saída)
 3. Leia o veredito. Qualquer FAIL = corrige a skill e repete.
+4. Registre o placar em [RESULTS.md](RESULTS.md) (a última rodada de cada skill).
 
 Manter aplicador e avaliador **separados** evita que quem produziu a resposta também se auto-aprove.
 
