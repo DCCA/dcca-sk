@@ -4,7 +4,7 @@ Logbook do repositório. Entradas em ordem reversa (mais recente no topo). Cada 
 
 ---
 
-## 2026-06-29 - Inicialização do repo + núcleo de skills completo com evals
+## 2026-06-29 - Inicialização do repo, núcleo completo com evals, e hardening (YAML + config separada)
 
 **Where we were:** Repo `dcca-sk` vazio (zero commits). Objetivo: criar, melhorar e organizar minhas agent skills profissionais (sou PM), de forma agnóstica a empresa. Existia só uma skill rascunhada (`daily-review`) num zip no Downloads.
 
@@ -16,6 +16,8 @@ Logbook do repositório. Entradas em ordem reversa (mais recente no topo). Cada 
 - Núcleo construído e validado por eval: `metric-definition` (#7), `weekly-metrics-digest` (#8), e `priorizacao` + `prd-writer` + `derive-tech-spec` + `status-update` (#9). Todas 11-14/14, zero alucinação.
 - `evals/RESULTS.md` para persistir os placares de cada rodada (#10).
 - 3 skills enxugadas para eficiência de token (`daily-review` 1882 -> 1210 palavras, -36%), re-validadas 14/14 (#11).
+- Fix de YAML no frontmatter: `description` de `daily-review` e `metric-definition` tinha `: ` em valor sem aspas (quebrava o parse / GitHub). Aspas simples + template corrigido (frontmatter no topo) + convenção no CLAUDE.md (#13). O `install.sh` passou a **validar o frontmatter** de cada skill e recusar instalar skill quebrada, com exit != 0 (#14).
+- Config separada (piloto na `daily-review`): a config (fontes, handles, canais, VIPs, glossário) saiu do corpo do SKILL.md para `config.example.md` (template versionado) + `config.md` (preenchido no destino, gitignored); o SKILL.md aponta pro `config.md`. Fecha o furo de ter que editar arquivo versionado para preencher config. Re-validada 14/14 (#15).
 
 **Decisions:**
 - Distribuição via symlink em `~/.claude/skills` (não plugin), pelo `install.sh`. Repo **agnóstico a empresa**: config sempre como placeholder, preenchida só no destino, para as skills serem portáteis entre empregos.
@@ -24,6 +26,7 @@ Logbook do repositório. Entradas em ordem reversa (mais recente no topo). Cada 
 - Teste de maior fidelidade via **mock MCP** (sem contas), não sandboxes reais.
 
 **Pending / next:**
+- [ ] Propagar o modelo de **config separada** (`config.example.md` + ponteiro no SKILL.md + `config.md` gitignored) para as outras 6 skills - piloto aprovado na `daily-review`, ainda não propagado.
 - [ ] Promover skills do backlog do `SKILLS-MAP.md` conforme tração. 1º candidato sugerido: `instrument-analytics`.
 - [ ] Opcional: arquivar o transcript completo de cada rodada de eval (hoje só o veredito consolidado fica no `RESULTS.md`).
 - [ ] Opcional: gerar um mock MCP server para testar a `daily-review` contra a interface real dos conectores.
