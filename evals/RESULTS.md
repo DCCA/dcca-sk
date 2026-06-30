@@ -18,5 +18,6 @@ Placar = invariantes + armadilhas da rubrica. "PASS" = todos verdes, zero alucin
 
 ## Notas
 
+- 2026-06-29: `daily-review` (1882 -> 1210 palavras), `metric-definition` e `weekly-metrics-digest` foram enxugadas para eficiência de token e re-validadas - mesmos placares, zero regressão.
 - A `daily-review` chegou ao 11/11 na rodada final, depois de 4 PRs de ajuste: as primeiras rodadas acharam ambiguidades reais (compromisso de grupo, preparo sem base, loops antigos, contradição do "A responder", item de desbloqueio enterrado) que viraram fixes. A rubrica atual trava essas regressões.
 - O transcript completo de cada rodada (a saída produzida + o veredito item a item) fica nos arquivos de tarefa da sessão, que são transitórios. O veredito consolidado fica aqui; se precisar do detalhe de uma rodada, rode a eval de novo (o resultado é determinístico o suficiente para reproduzir).
