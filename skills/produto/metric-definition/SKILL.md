@@ -1,6 +1,6 @@
 ---
 name: metric-definition
-description: Use quando precisa cravar a definição de uma métrica de forma inequívoca - "como a gente define X", "qual a fórmula de ativação/retenção/conversão", quando duas pessoas mostram números diferentes para a mesma métrica, ou antes de instrumentar um evento ou montar um dashboard. Gatilhos: "definir métrica", "o que conta como ativado", "por que os números não batem", "qual a definição oficial de".
+description: 'Use quando precisa cravar a definição de uma métrica de forma inequívoca - "como a gente define X", "qual a fórmula de ativação/retenção/conversão", quando duas pessoas mostram números diferentes para a mesma métrica, ou antes de instrumentar um evento ou montar um dashboard. Gatilhos: "definir métrica", "o que conta como ativado", "por que os números não batem", "qual a definição oficial de".'
 ---
 
 # Metric Definition

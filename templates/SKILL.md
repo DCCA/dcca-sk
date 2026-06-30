@@ -1,15 +1,18 @@
-<!--
-TEMPLATE de skill. Copie este arquivo para skills/<categoria>/<nome-kebab>/SKILL.md
-e preencha. Prefira gerar/melhorar a skill pelo fluxo do skill `writing-skills`
-(tem verificacao/evals) em vez de escrever no improviso.
-
-Regra de ouro: uma skill = um proposito. Se esta fazendo coisas demais, quebre em duas.
-Apague as secoes opcionais que nao usar e remova estes comentarios no final.
--->
 ---
 name: nome-da-skill-em-kebab-case
-description: <Terceira pessoa. Descreva O QUE a skill faz e, principalmente, QUANDO usa-la. Liste gatilhos concretos - frases ou situacoes que devem ativa-la. Este campo e o que faz o Claude escolher a skill, entao seja especifico nos disparadores. Ex: "Use quando o usuario disser X, Y ou pedir Z - mesmo sem usar a palavra exata.">
+description: 'Terceira pessoa. O QUE a skill faz e, principalmente, QUANDO usa-la, com gatilhos concretos. Use aspas simples: a descricao costuma conter ":" e aspas, que quebram o YAML se ficar sem aspas. Ex: Use quando o usuario disser X, Y ou pedir Z - mesmo sem a palavra exata.'
 ---
+
+<!--
+TEMPLATE de skill. Copie para skills/<categoria>/<nome-kebab>/SKILL.md e preencha.
+
+O frontmatter (name + description) DEVE ser a primeira coisa do arquivo - estes comentarios
+ficam DEPOIS do frontmatter, nunca antes. A description fica entre aspas simples (vide acima).
+
+Prefira gerar/melhorar a skill pela skill `writing-skills` (com eval) em vez de escrever no
+improviso. Regra de ouro: uma skill = um proposito. Apague as secoes opcionais que nao usar
+e remova estes comentarios.
+-->
 
 # Nome da Skill
 

@@ -23,7 +23,7 @@ Use **sempre** o skill `superpowers:writing-skills` (versao com verificacao/eval
 Convencoes:
 
 - `name` em kebab-case, igual ao nome do diretorio.
-- `description` em terceira pessoa, focada em QUANDO usar, com gatilhos concretos. E o campo que faz o Claude escolher a skill - capriche.
+- `description` em terceira pessoa, focada em QUANDO usar, com gatilhos concretos. E o campo que faz o Claude escolher a skill - capriche. Coloque entre **aspas simples** no YAML: ela costuma conter `:` e aspas, que quebram o frontmatter se ficar sem aspas. O frontmatter (`---`) e a primeira coisa do arquivo, sempre.
 - Uma skill = um proposito. Se esta fazendo coisas demais, quebre em duas.
 - Idioma: portugues (como as minhas skills), salvo se a skill for para compartilhar publicamente.
 - **Nunca** preencher config com dados reais de uma empresa - deixe placeholders entre colchetes (ver `daily-review`).
