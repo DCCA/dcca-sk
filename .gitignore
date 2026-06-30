@@ -2,3 +2,7 @@
 Thumbs.db
 *.swp
 *~
+
+# Config preenchida de cada skill (dados reais da empresa nunca vao para o repo).
+# Versionamos so o config.example.md; o config.md fica local.
+skills/**/config.md
