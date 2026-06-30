@@ -13,13 +13,7 @@ Reporte apenas o que veio de uma fonte real consultada nesta execução. Não en
 
 ## Configuração
 
-Preencher uma vez (no destino, ao importar). Campo vazio: a skill segue sem ele, com menos precisão.
-
-- **Fontes ativas:** [calendário, e-mail, Slack, GitHub, Jira, transcrições - só as que sua empresa usa]. A skill consulta apenas estas; adapte à sua stack (Jira ou Linear; Teams no lugar de Slack).
-- **Handles no Slack:** [@seu.handle, apelidos] - para detectar menções diretas.
-- **Canais prioritários (allowlist):** [#squad, ...] - lidos por completo; fora da lista, só DMs, menções e threads onde você respondeu.
-- **VIPs no e-mail:** [chefe, pares, clientes] - prioridade mesmo sem estrela.
-- **Glossário:** [pessoas, produtos, siglas] - para normalizar termos que a transcrição distorce.
+A config desta skill - **fontes ativas, handles, canais prioritários, VIPs, glossário** - fica em `config.md`, no diretório da skill (não no corpo dela). Antes de coletar (Passo 2), **leia o `config.md`** (se existir) e use-o para escopar a coleta. Não existe? Siga com o que houver - campo ausente só reduz a precisão. O template e a descrição de cada campo estão em `config.example.md` (copie para `config.md` e preencha; `config.md` é ignorado pelo git).
 
 ## Passo 1 - Ancorar o tempo
 
