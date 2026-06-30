@@ -1,6 +1,6 @@
 ---
 name: daily-review
-description: Use quando o usuário quer fechar o dia anterior e preparar o dia atual - a rotina diária pessoal de um PM. Gatilhos: "daily", "review diário", "fechar o dia", "revisar ontem", "preparar meu dia", "o que tenho hoje", "começar o dia", ou qualquer pedido de rotina de manhã / início de expediente, mesmo que não use a palavra "daily" explicitamente.
+description: 'Use quando o usuário quer fechar o dia anterior e preparar o dia atual - a rotina diária pessoal de um PM. Gatilhos: "daily", "review diário", "fechar o dia", "revisar ontem", "preparar meu dia", "o que tenho hoje", "começar o dia", ou qualquer pedido de rotina de manhã / início de expediente, mesmo que não use a palavra "daily" explicitamente.'
 ---
 
 # Daily Review
