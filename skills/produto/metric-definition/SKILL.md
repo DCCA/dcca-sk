@@ -9,7 +9,7 @@ Produz uma **metric spec**: a fonte única de verdade de UMA métrica. O alvo n�
 
 ## Princípio que não pode ser quebrado
 
-Toda decisão escondida vira explícita. Uma métrica carrega dezenas de escolhas silenciosas (que população entra, qual janela, como deduplica, o que fazer com reativação). Cada escolha que fica implícita é uma divergência futura esperando para acontecer. Se uma escolha não foi confirmada com a fonte ou o dono, marque-a como **(assumido)** - nunca a apresente como fato. E não invente número: esta skill define a métrica, não a mede.
+Toda decisão escondida vira explícita. Uma métrica carrega escolhas silenciosas (população, janela, dedup, reativação); cada uma implícita é uma divergência futura. Escolha não confirmada com a fonte/dono recebe **(assumido)**, nunca é apresentada como fato. E não invente número: esta skill define a métrica, não a mede.
 
 ## Configuração
 
@@ -20,7 +20,7 @@ Toda decisão escondida vira explícita. Uma métrica carrega dezenas de escolha
 
 ## Passo 1 - Ancorar na pergunta de negócio
 
-Antes da fórmula: que decisão essa métrica informa? Uma métrica existe para mudar um comportamento ou uma escolha. Escreva em uma frase o que ela mede e por quê. Se ninguém age sobre ela, talvez não precise deste rigor.
+Antes da fórmula: que decisão essa métrica informa? Escreva em uma frase o que ela mede e por quê. Métrica sobre a qual ninguém age talvez não precise deste rigor.
 
 ## Passo 2 - Preencher a spec
 
@@ -38,7 +38,7 @@ Defina cada campo. Onde a fonte não responde, marque **(assumido)** e siga.
 
 ## Passo 3 - Reconciliar divergências
 
-Se a métrica está em disputa (dois números diferentes), a definição só fecha quando as leituras foram reconciliadas. Liste a divergência, escolha uma e diga **qual** escolha a spec adotou - explicitamente. Não escolha em silêncio.
+Se a métrica está em disputa (dois números), a definição só fecha quando as leituras são reconciliadas: liste a divergência e diga **qual** escolha a spec adotou. Não escolha em silêncio.
 
 ## Formato de saída
 

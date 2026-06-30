@@ -9,7 +9,7 @@ Resumo semanal das métricas que importam, virado para o sinal, não para o desp
 
 ## Princípio que não pode ser quebrado
 
-Número sem movimento e sem leitura é ruído. Toda métrica reportada vem com três coisas: o **valor**, a **variação** (vs semana passada e/ou vs meta) e um **sinal** (estável / melhora / piora / anomalia). E honestidade dura: **não invente causa**. Uma explicação para um movimento é uma **hipótese** até ser confirmada - marque como hipótese e diga o que checar. Se um dado está faltando ou quebrado, diga; nunca estime um número e o apresente como medido.
+Número sem movimento e sem leitura é ruído. Toda métrica vem com três coisas: **valor**, **variação** (vs semana passada e/ou meta) e **sinal** (estável/melhora/piora/anomalia). E honestidade dura: **não invente causa** - uma explicação é **hipótese** até confirmar; marque como tal e diga o que checar. Dado faltando ou quebrado: diga, nunca estime um número como se fosse medido.
 
 ## Configuração
 
@@ -28,7 +28,7 @@ Para cada métrica da config: valor da semana, variação (WoW e vs meta), e cla
 
 ## Passo 3 - Anomalias e leitura
 
-Para cada movimento relevante (e todo guardrail fora do limite): levante a causa provável como **hipótese** (marcada como tal) e diga o que checar para confirmar. Conecte movimentos que podem estar ligados, mas sem afirmar causalidade. Pistas de contexto (deploys, campanhas) são insumo de hipótese, não prova.
+Para cada movimento relevante (e todo guardrail fora do limite): levante a causa provável como **hipótese** e diga o que checar. Conecte movimentos que podem estar ligados, sem afirmar causalidade. Pistas de contexto (deploys, campanhas) são insumo de hipótese, não prova.
 
 ## Passo 4 - Qualidade do dado
 
