@@ -40,3 +40,5 @@ Depois de adicionar ou editar uma skill, rode `./install.sh` para (re)criar os s
 ## Git
 
 Nunca commitar direto na `main`. Branch + PR para cada mudanca. Nas mensagens de commit, usar "-" simples (nunca dash longo) e nao adicionar co-author automatico.
+
+**Security scan obrigatorio antes de qualquer PR e merge.** Este repo e publico: nada de segredo, credencial, PII ou path absoluto do home (`/home/usuario`) pode entrar. O `scripts/security-scan.sh` roda **automaticamente no `githooks/pre-push`** e bloqueia o push se achar algo; `./install.sh` arma o hook (`core.hooksPath -> githooks`) por clone. Rode `./scripts/security-scan.sh` na mao a qualquer momento (ou `--history` para varrer todo o log). Bypass so em emergencia real: `git push --no-verify`. Se algum fluxo (ship, session-status) for abrir PR/merge, garanta que o scan passou antes.

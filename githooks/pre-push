@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Bloqueia o push se o security scan achar segredo/PII/arquivo sensivel.
+# Armado por install.sh (git config core.hooksPath githooks).
+# Emergencia (evite): git push --no-verify
+exec "$(git rev-parse --show-toplevel)/scripts/security-scan.sh"

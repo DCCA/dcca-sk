@@ -127,6 +127,15 @@ if [[ -d "$CONFIG_SRC" ]]; then
   echo "Config: $cfg_copied copiado(s), $cfg_kept ja atual(is). Destino: $CONFIG_TARGET"
 fi
 
+# --- Git hooks deste repo ---------------------------------------------------
+# Arma o security scan no pre-push (repo publico: nada de segredo/PII no push).
+# core.hooksPath e config local do clone, entao precisa ser setado por clone.
+if git -C "$REPO_DIR" rev-parse --git-dir >/dev/null 2>&1; then
+  chmod +x "$REPO_DIR/githooks/pre-push" "$REPO_DIR/scripts/security-scan.sh" 2>/dev/null || true
+  git -C "$REPO_DIR" config core.hooksPath githooks
+  echo "Git hooks: core.hooksPath -> githooks (security scan no pre-push)."
+fi
+
 if [[ "$invalid" -gt 0 ]]; then
   echo "Corrija o frontmatter das skills invalidas e rode de novo." >&2
   exit 1
