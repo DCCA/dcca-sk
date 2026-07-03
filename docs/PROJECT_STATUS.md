@@ -4,6 +4,31 @@ Logbook do repositório. Entradas em ordem reversa (mais recente no topo). Cada 
 
 ---
 
+## 2026-07-03 - Skill capturar-config-claude, teste de trigger, e security scan em 2 camadas
+
+**Where we were:** Setup portátil do `~/.claude` já no repo (config por cópia + `capture.sh`), statusline nova. Faltava: transformar o `capture.sh` numa skill, validar que ela é efetiva, e garantir que nada sensível vaze neste repo público.
+
+**What we did:**
+- **Skill `capturar-config-claude`** (`skills/dev/`): wrapper do `capture.sh` que reconhece o pedido, roda a captura, revisa o diff com olhar de segurança e sobe via PR. Com cenário + rubrica (comportamental, não puxa da Acme por ser tooling). (#21)
+- **Teste da skill vs evals** (sandbox isolado, sem tocar repo/config reais): passou 8/8 na rubrica, inclusive resolução do repo a frio (cwd num projeto não relacionado). Mas o baseline **sem skill** também acertou - porque o próprio repo (README + `capture.sh` safe-by-design) já ensina tudo. Conclusão honesta: a skill é **correta**, mas o valor marginal sobre a doc do repo é pequeno; o que ela adiciona de único é o trigger garantido.
+- **Otimização de trigger (skill-creator)**: 1ª rodada deu 0.0 em tudo - era **artefato de medição** (a skill real instalada ofuscava o proxy do harness). Diagnosticado e corrigido (stash da skill real durante o teste). Rodada válida: nenhuma das 5 descrições reescritas bateu a original, e os números absolutos do harness (proxy de comando) não são confiáveis para esta skill. Decisão: **manter a descrição atual** (nada melhor foi achado). Teste manual confirma que a skill dispara ("Vou usar a skill de capturar config").
+- **Security scan obrigatório, 2 camadas** (repo público):
+  - `scripts/security-scan.sh` (segredos, atribuições, `/home/usuario` fora de docs, email em conteúdo, arquivos sensíveis rastreados; `--history` varre o log). Testado: limpo=OK, segredo plantado=bloqueado, zero falso-positivo.
+  - Camada local: `githooks/pre-push` faz `exec` do scan; `install.sh` arma `core.hooksPath -> githooks` por clone. (#22)
+  - Camada server-side: workflow `.github/workflows/security-scan.yml` roda o scan em cada PR **sem token** (só o `GITHUB_TOKEN` efêmero); `main` com **branch protection** exigindo o check `security-scan` + `enforce_admins`. Provado: merge com check pendente é bloqueado, só passa com verde. (#23, #24)
+
+**Decisions:**
+- **Skill mantida mesmo com valor marginal pequeno**: é barata e o trigger garantido é útil; a doc do repo é que faz o trabalho pesado.
+- **Não confiar nos números do otimizador de trigger** aqui: o harness mede um proxy de comando que sub-mede vs skill real instalada.
+- **Enforcement por git/CI, não por memória**: automação de "antes de PR/merge" tem que ser hook + branch protection (o harness/GitHub executa), não preferência.
+- **Sem token novo**: Actions usa `GITHUB_TOKEN` efêmero; branch protection setada via auth existente do `gh` (escopo `repo` já tinha).
+
+**Pending / next:**
+- [ ] Opcional: vendorizar skills de terceiros pro repo (offline-completo). Ainda adiado.
+- [ ] Opcional: se a skill `capturar-config-claude` errar o trigger em uso real com frase tipo "subir pro repositório das skills", adicionar essa frase exata como gatilho.
+- [ ] Herdado: propagar config separada (`config.example.md` + `config.md` gitignored) para as outras 6 skills.
+- [ ] Herdado: promover skills do backlog do `SKILLS-MAP.md` conforme tração.
+
 ## 2026-07-02 - Setup portátil do Claude Code (config no repo) + statusline
 
 **Where we were:** O repo guardava só as skills (symlink via `install.sh`). A config do Claude Code (`~/.claude`: instruções, settings, statusline, hooks) vivia só na máquina, não portátil. O pedido inicial era só melhorar a statusline.
