@@ -41,4 +41,9 @@ Depois de adicionar ou editar uma skill, rode `./install.sh` para (re)criar os s
 
 Nunca commitar direto na `main`. Branch + PR para cada mudanca. Nas mensagens de commit, usar "-" simples (nunca dash longo) e nao adicionar co-author automatico.
 
-**Security scan obrigatorio antes de qualquer PR e merge.** Este repo e publico: nada de segredo, credencial, PII ou path absoluto do home (`/home/usuario`) pode entrar. O `scripts/security-scan.sh` roda **automaticamente no `githooks/pre-push`** e bloqueia o push se achar algo; `./install.sh` arma o hook (`core.hooksPath -> githooks`) por clone. Rode `./scripts/security-scan.sh` na mao a qualquer momento (ou `--history` para varrer todo o log). Bypass so em emergencia real: `git push --no-verify`. Se algum fluxo (ship, session-status) for abrir PR/merge, garanta que o scan passou antes.
+**Security scan obrigatorio antes de qualquer PR e merge.** Este repo e publico: nada de segredo, credencial, PII ou path absoluto do home (`/home/usuario`) pode entrar. Duas camadas:
+
+1. **Local (`githooks/pre-push`)** - o `scripts/security-scan.sh` roda antes de todo push e bloqueia se achar algo. `./install.sh` arma o hook (`core.hooksPath -> githooks`) por clone. Rode `./scripts/security-scan.sh` na mao quando quiser (`--history` varre o log). Bypass so em emergencia: `git push --no-verify`.
+2. **Server-side (GitHub Actions + branch protection)** - o workflow `.github/workflows/security-scan.yml` roda o mesmo scan em cada PR; a `main` tem branch protection exigindo o check `security-scan` (com `enforce_admins`), entao **nao da pra mergear com o check vermelho**. Sem token: usa so o `GITHUB_TOKEN` efemero.
+
+Consequencia pratica: um `gh pr merge` so completa depois do check verde. Se algum fluxo (ship, session-status) for mergear, espere o check passar.
