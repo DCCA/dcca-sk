@@ -4,6 +4,28 @@ Logbook do repositório. Entradas em ordem reversa (mais recente no topo). Cada 
 
 ---
 
+## 2026-07-02 - Setup portátil do Claude Code (config no repo) + statusline
+
+**Where we were:** O repo guardava só as skills (symlink via `install.sh`). A config do Claude Code (`~/.claude`: instruções, settings, statusline, hooks) vivia só na máquina, não portátil. O pedido inicial era só melhorar a statusline.
+
+**What we did:**
+- Statusline reescrita em **python3** (sem depender de `jq`, que não estava instalado): mostra `modelo | dir | branch | $/prompt | $ sessão | +/- linhas`. `$/prompt` = delta do custo cumulativo por sessão, persistido em `~/.claude/statusline-state/`. Corrigi dois bugs do rascunho inicial (dependência de jq; heredoc roubando o stdin do JSON). Verificada ponta a ponta.
+- **Setup portátil** do `~/.claude`: novo `home-claude/` espelha os arquivos portáteis (`AGENTS.md`, `settings.json`, `statusline-command.sh`, `hooks/`). `settings.json` usa `$HOME` nos paths (funciona em qualquer usuário). Plugins já eram portáteis via `enabledPlugins`. (#17)
+- Config passou de **symlink para cópia**: `install.sh` copia `home-claude/` -> `~/.claude` como arquivos reais; a máquina fica independente do repo (mover/apagar o repo não quebra mais o setup). (#18)
+- Novo **`capture.sh`**: caminho de volta (máquina -> repo). Copia os arquivos rastreados do `~/.claude` para `home-claude/`, re-normaliza paths absolutos para `$HOME` no `settings.json`, pula idênticos, não commita. (#19)
+- **Auditoria de segurança** (repo é público): varredura de segredos/PII na árvore e em todo o histórico git. Limpo - zero tokens/keys/credenciais; nenhum `.credentials.json`/`settings.local.json` jamais commitado; sem paths `/home/USER`. Único achado: o e-mail nos metadados de autor dos commits (inerente a qualquer repo público), não vaza de nenhum arquivo.
+
+**Decisions:**
+- **Cópia, não symlink**, para a config: o usuário preferiu que `~/.claude` tenha arquivos reais e independentes do repo. Trade-off aceito: mudanças não fluem sozinhas - editar em `home-claude/` + `install.sh` (repo -> máquina), ou `capture.sh` (máquina -> repo).
+- Sync de config é **script de plumbing** (`capture.sh`), não uma skill em `skills/` - estas são as skills portáteis de PM/dev com evals, agnósticas a empresa.
+- Não vendorizar skills de terceiros (hoje symlinkadas de `~/.agents/skills` e `~/projects/jona`) - adiado.
+
+**Pending / next:**
+- [ ] Opcional: vendorizar no repo as skills de terceiros que uso, para o set ficar offline-completo em qualquer máquina.
+- [ ] Opcional: thin skill que dispara `capture.sh` por conversa ("captura minha config").
+- [ ] Herdado: propagar o modelo de **config separada** (`config.example.md` + `config.md` gitignored) para as outras 6 skills - piloto aprovado na `daily-review`.
+- [ ] Herdado: promover skills do backlog do `SKILLS-MAP.md` conforme tração (1º candidato: `instrument-analytics`).
+
 ## 2026-06-29 - Inicialização do repo, núcleo completo com evals, e hardening (YAML + config separada)
 
 **Where we were:** Repo `dcca-sk` vazio (zero commits). Objetivo: criar, melhorar e organizar minhas agent skills profissionais (sou PM), de forma agnóstica a empresa. Existia só uma skill rascunhada (`daily-review`) num zip no Downloads.
