@@ -6,3 +6,8 @@ Thumbs.db
 # Config preenchida de cada skill (dados reais da empresa nunca vao para o repo).
 # Versionamos so o config.example.md; o config.md fica local.
 skills/**/config.md
+
+# Config portatil (~/.claude): NUNCA versionar segredos nem estado local.
+home-claude/.credentials.json
+home-claude/settings.local.json
+home-claude/history.jsonl

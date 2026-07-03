@@ -90,6 +90,38 @@ done < <(find "$SKILLS_SRC" -name SKILL.md -print0 | sort -z)
 echo
 echo "Concluido: $linked linkada(s), $skipped pulada(s), $invalid invalida(s). Destino: $TARGET"
 
+# --- Config portatil (~/.claude) -------------------------------------------
+# Espelha cada arquivo de home-claude/ em ~/.claude via symlink. Arquivos reais
+# ja existentes sao movidos para ~/.claude/backups/ uma vez antes de virar link.
+# Nunca toca em credenciais/estado (nao estao no repo). Destino custom: CLAUDE_HOME.
+CONFIG_SRC="$REPO_DIR/home-claude"
+CONFIG_TARGET="${CLAUDE_HOME:-$HOME/.claude}"
+cfg_linked=0
+
+if [[ -d "$CONFIG_SRC" ]]; then
+  backup_dir="$CONFIG_TARGET/backups/config-$(date +%Y%m%d-%H%M%S)"
+  while IFS= read -r -d '' src; do
+    rel="${src#"$CONFIG_SRC"/}"
+    dst="$CONFIG_TARGET/$rel"
+    mkdir -p "$(dirname "$dst")"
+
+    if [[ -L "$dst" ]]; then
+      ln -sfn "$src" "$dst"        # ja e symlink: (re)aponta pro repo
+      echo "config atualizado: $rel"
+    elif [[ -e "$dst" ]]; then
+      mkdir -p "$(dirname "$backup_dir/$rel")"
+      mv "$dst" "$backup_dir/$rel"  # arquivo real: backup antes de linkar
+      ln -s "$src" "$dst"
+      echo "config linkado:    $rel (backup em ${backup_dir#"$CONFIG_TARGET"/})"
+    else
+      ln -s "$src" "$dst"
+      echo "config linkado:    $rel"
+    fi
+    cfg_linked=$((cfg_linked + 1))
+  done < <(find "$CONFIG_SRC" -type f -print0 | sort -z)
+  echo "Config: $cfg_linked arquivo(s) linkado(s). Destino: $CONFIG_TARGET"
+fi
+
 if [[ "$invalid" -gt 0 ]]; then
   echo "Corrija o frontmatter das skills invalidas e rode de novo." >&2
   exit 1

@@ -1,20 +1,22 @@
 # dcca-sk
 
-Minhas agent skills (Claude Code) - criar, melhorar e organizar as skills que uso no trabalho.
+Minhas agent skills (Claude Code) + o setup portatil do meu Claude Code - criar, melhorar e organizar tudo que uso no trabalho, para levar entre maquinas e empregos.
 
 O repo e **agnostico a empresa**: as skills ficam genericas, com a configuracao especifica como placeholder. A config real e preenchida so no destino, na hora de importar. Assim as skills sao portateis entre empregos.
 
 ## Estrutura
 
 ```
-skills/
-  dev/        engenharia de software
-  produto/    produto, dados, growth
-  escrita/    escrita e comunicacao
+skills/         minhas skills (dev/, produto/, escrita/)
 templates/
-  SKILL.md    base para uma skill nova
-install.sh    cria os symlinks em ~/.claude/skills
-CLAUDE.md     convencoes (lido pelo Claude ao trabalhar neste repo)
+  SKILL.md      base para uma skill nova
+home-claude/    config portatil do ~/.claude (symlinkado no install)
+  AGENTS.md               instrucoes globais (CLAUDE.md aponta pra ca)
+  settings.json           permissoes, hooks, plugins, statusline (paths com $HOME)
+  statusline-command.sh   status line (modelo | dir | branch | $/prompt | $ sessao | +/- linhas)
+  hooks/                  hooks custom (ex: herdr-agent-state.sh)
+install.sh      cria os symlinks de skills E da config em ~/.claude
+CLAUDE.md       convencoes (lido pelo Claude ao trabalhar neste repo)
 ```
 
 Cada skill vive em `skills/<categoria>/<nome>/SKILL.md`.
@@ -25,9 +27,18 @@ Cada skill vive em `skills/<categoria>/<nome>/SKILL.md`.
 ./install.sh
 ```
 
-Cria um symlink de cada skill em `~/.claude/skills/<nome>`. Por ser symlink, editar a skill no repo reflete direto no Claude. Rode de novo ao adicionar uma skill nova.
+Faz duas coisas, via symlink (editar no repo reflete direto no Claude):
 
-Destino customizavel: `CLAUDE_SKILLS_DIR=/outro/caminho ./install.sh`.
+1. **Skills** - cada `SKILL.md` vira `~/.claude/skills/<nome>`.
+2. **Config** - cada arquivo de `home-claude/` vira `~/.claude/<arquivo>`. Um arquivo real ja existente e movido para `~/.claude/backups/config-<timestamp>/` antes de virar link. Idempotente.
+
+Numa maquina nova: clone o repo, rode `./install.sh`, e o Claude Code ja sobe com suas instrucoes, settings, statusline e hooks. Os **plugins** (superpowers, ponytail, vercel, ...) sao restaurados sozinhos pelo `settings.json` (`enabledPlugins` + `extraKnownMarketplaces`).
+
+Destinos customizaveis: `CLAUDE_SKILLS_DIR=/x CLAUDE_HOME=/y ./install.sh`.
+
+### O que NAO vai para o repo
+
+Segredos e estado local ficam so na maquina, nunca versionados: `.credentials.json`, `settings.local.json`, `history.jsonl`, `sessions/`, `projects/` (transcricoes + memoria), caches. Se precisar de override por maquina, use `~/.claude/settings.local.json` (o Claude Code mescla por cima do `settings.json`).
 
 ## Criar uma skill
 
