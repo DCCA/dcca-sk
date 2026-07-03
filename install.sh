@@ -91,12 +91,15 @@ echo
 echo "Concluido: $linked linkada(s), $skipped pulada(s), $invalid invalida(s). Destino: $TARGET"
 
 # --- Config portatil (~/.claude) -------------------------------------------
-# Espelha cada arquivo de home-claude/ em ~/.claude via symlink. Arquivos reais
-# ja existentes sao movidos para ~/.claude/backups/ uma vez antes de virar link.
-# Nunca toca em credenciais/estado (nao estao no repo). Destino custom: CLAUDE_HOME.
+# COPIA cada arquivo de home-claude/ para ~/.claude (arquivos reais, nao symlink).
+# O repo e a copia-mestra; o install "instala" essa copia na maquina, que fica
+# independente do repo. Um arquivo real ja existente e DIFERENTE e salvo em
+# ~/.claude/backups/ antes de ser sobrescrito; se ja for identico, nao faz nada.
+# Symlinks de versoes antigas sao removidos. Destino custom: CLAUDE_HOME.
 CONFIG_SRC="$REPO_DIR/home-claude"
 CONFIG_TARGET="${CLAUDE_HOME:-$HOME/.claude}"
-cfg_linked=0
+cfg_copied=0
+cfg_kept=0
 
 if [[ -d "$CONFIG_SRC" ]]; then
   backup_dir="$CONFIG_TARGET/backups/config-$(date +%Y%m%d-%H%M%S)"
@@ -106,20 +109,22 @@ if [[ -d "$CONFIG_SRC" ]]; then
     mkdir -p "$(dirname "$dst")"
 
     if [[ -L "$dst" ]]; then
-      ln -sfn "$src" "$dst"        # ja e symlink: (re)aponta pro repo
-      echo "config atualizado: $rel"
-    elif [[ -e "$dst" ]]; then
+      rm -f "$dst"                        # remove symlink de versoes antigas
+    elif [[ -f "$dst" ]]; then
+      if cmp -s "$src" "$dst"; then
+        cfg_kept=$((cfg_kept + 1))
+        continue                          # ja identico: nao mexe
+      fi
       mkdir -p "$(dirname "$backup_dir/$rel")"
-      mv "$dst" "$backup_dir/$rel"  # arquivo real: backup antes de linkar
-      ln -s "$src" "$dst"
-      echo "config linkado:    $rel (backup em ${backup_dir#"$CONFIG_TARGET"/})"
-    else
-      ln -s "$src" "$dst"
-      echo "config linkado:    $rel"
+      cp "$dst" "$backup_dir/$rel"        # backup do arquivo real antes de sobrescrever
+      echo "config backup:     $rel -> ${backup_dir#"$CONFIG_TARGET"/}"
     fi
-    cfg_linked=$((cfg_linked + 1))
+
+    cp "$src" "$dst"
+    echo "config copiado:    $rel"
+    cfg_copied=$((cfg_copied + 1))
   done < <(find "$CONFIG_SRC" -type f -print0 | sort -z)
-  echo "Config: $cfg_linked arquivo(s) linkado(s). Destino: $CONFIG_TARGET"
+  echo "Config: $cfg_copied copiado(s), $cfg_kept ja atual(is). Destino: $CONFIG_TARGET"
 fi
 
 if [[ "$invalid" -gt 0 ]]; then

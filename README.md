@@ -15,7 +15,7 @@ home-claude/    config portatil do ~/.claude (symlinkado no install)
   settings.json           permissoes, hooks, plugins, statusline (paths com $HOME)
   statusline-command.sh   status line (modelo | dir | branch | $/prompt | $ sessao | +/- linhas)
   hooks/                  hooks custom (ex: herdr-agent-state.sh)
-install.sh      cria os symlinks de skills E da config em ~/.claude
+install.sh      symlinka as skills e COPIA a config em ~/.claude
 CLAUDE.md       convencoes (lido pelo Claude ao trabalhar neste repo)
 ```
 
@@ -27,10 +27,12 @@ Cada skill vive em `skills/<categoria>/<nome>/SKILL.md`.
 ./install.sh
 ```
 
-Faz duas coisas, via symlink (editar no repo reflete direto no Claude):
+Faz duas coisas:
 
-1. **Skills** - cada `SKILL.md` vira `~/.claude/skills/<nome>`.
-2. **Config** - cada arquivo de `home-claude/` vira `~/.claude/<arquivo>`. Um arquivo real ja existente e movido para `~/.claude/backups/config-<timestamp>/` antes de virar link. Idempotente.
+1. **Skills** (symlink) - cada `SKILL.md` vira `~/.claude/skills/<nome>`. Como e symlink, editar a skill no repo reflete direto no Claude.
+2. **Config** (copia) - cada arquivo de `home-claude/` e **copiado** para `~/.claude/<arquivo>` como arquivo real. `~/.claude` fica independente do repo. Um arquivo real ja existente e diferente e salvo em `~/.claude/backups/config-<timestamp>/` antes de ser sobrescrito; se ja for identico, nada acontece. Idempotente.
+
+O repo e a **copia-mestra** da config: edite em `home-claude/`, rode `./install.sh` para instalar na maquina, e commite. Um ajuste feito direto em `~/.claude` **nao** volta sozinho para o repo - copie de volta para `home-claude/` e commite se quiser guardar.
 
 Numa maquina nova: clone o repo, rode `./install.sh`, e o Claude Code ja sobe com suas instrucoes, settings, statusline e hooks. Os **plugins** (superpowers, ponytail, vercel, ...) sao restaurados sozinhos pelo `settings.json` (`enabledPlugins` + `extraKnownMarketplaces`).
 
