@@ -71,6 +71,7 @@ Convencoes completas em [`CLAUDE.md`](CLAUDE.md).
 | `priorizacao` | produto | Fila auditavel (RICE): escala calibrada, premissa por nota, baixa confianca vira discovery. |
 | `prd-writer` | produto | PRD com problema e metrica de sucesso antes da solucao; marca o que e aberto/assumido. |
 | `derive-tech-spec` | dev | Plano tecnico derivado do PRD; cada decisao rastreia a um requisito; supoe o codebase com (assumido). |
+| `capturar-config-claude` | dev | Traz mudancas feitas no `~/.claude` de volta pro repo: roda `capture.sh`, revisa o diff (sem vazar segredo/path) e sobe via PR. |
 | `status-update` | escrita | Update BLUF com farol honesto, riscos e asks explicitos; nao infla. |
 
 Roadmap (nucleo a construir + backlog) em [`SKILLS-MAP.md`](SKILLS-MAP.md).
