@@ -1,0 +1,20 @@
+name: security-scan
+# Roda o mesmo scan do pre-push local em cada PR e no push pra main.
+# Sem token nenhum: usa so o GITHUB_TOKEN efemero do checkout (read-only).
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # historico completo para o --history varrer o log
+      - name: Run security scan (tracked files + history)
+        run: bash scripts/security-scan.sh --history
