@@ -15,8 +15,9 @@ home-claude/    config portatil do ~/.claude (symlinkado no install)
   settings.json           permissoes, hooks, plugins, statusline (paths com $HOME)
   statusline-command.sh   status line (modelo | dir | branch | $/prompt | $ sessao | +/- linhas)
   hooks/                  hooks custom (ex: herdr-agent-state.sh)
-install.sh      symlinka as skills e COPIA a config em ~/.claude (repo -> maquina)
+install.sh      symlinka as skills e COPIA a config em ~/.claude (repo -> maquina); arma o hook de git
 capture.sh      copia a config do ~/.claude de volta pra home-claude/ (maquina -> repo)
+scripts/        security-scan.sh (segredo/PII); roda no githooks/pre-push antes de todo push
 CLAUDE.md       convencoes (lido pelo Claude ao trabalhar neste repo)
 ```
 
