@@ -15,7 +15,8 @@ home-claude/    config portatil do ~/.claude (symlinkado no install)
   settings.json           permissoes, hooks, plugins, statusline (paths com $HOME)
   statusline-command.sh   status line (modelo | dir | branch | $/prompt | $ sessao | +/- linhas)
   hooks/                  hooks custom (ex: herdr-agent-state.sh)
-install.sh      symlinka as skills e COPIA a config em ~/.claude
+install.sh      symlinka as skills e COPIA a config em ~/.claude (repo -> maquina)
+capture.sh      copia a config do ~/.claude de volta pra home-claude/ (maquina -> repo)
 CLAUDE.md       convencoes (lido pelo Claude ao trabalhar neste repo)
 ```
 
@@ -32,7 +33,17 @@ Faz duas coisas:
 1. **Skills** (symlink) - cada `SKILL.md` vira `~/.claude/skills/<nome>`. Como e symlink, editar a skill no repo reflete direto no Claude.
 2. **Config** (copia) - cada arquivo de `home-claude/` e **copiado** para `~/.claude/<arquivo>` como arquivo real. `~/.claude` fica independente do repo. Um arquivo real ja existente e diferente e salvo em `~/.claude/backups/config-<timestamp>/` antes de ser sobrescrito; se ja for identico, nada acontece. Idempotente.
 
-O repo e a **copia-mestra** da config: edite em `home-claude/`, rode `./install.sh` para instalar na maquina, e commite. Um ajuste feito direto em `~/.claude` **nao** volta sozinho para o repo - copie de volta para `home-claude/` e commite se quiser guardar.
+O repo e a **copia-mestra** da config: edite em `home-claude/`, rode `./install.sh` para instalar na maquina, e commite.
+
+### Capturar mudancas feitas na maquina
+
+Ajustou algo direto em `~/.claude` (settings, statusline, hook)? Traga de volta pro repo:
+
+```bash
+./capture.sh
+```
+
+Copia cada arquivo rastreado do `~/.claude` para `home-claude/` (so os que ja existem la), reescreve paths absolutos do home para `$HOME` no `settings.json` (nao vaza `/home/USER`), e nao commita nada - revise com `git diff` e commite voce. Origem custom: `CLAUDE_HOME=/x ./capture.sh`.
 
 Numa maquina nova: clone o repo, rode `./install.sh`, e o Claude Code ja sobe com suas instrucoes, settings, statusline e hooks. Os **plugins** (superpowers, ponytail, vercel, ...) sao restaurados sozinhos pelo `settings.json` (`enabledPlugins` + `extraKnownMarketplaces`).
 
