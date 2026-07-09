@@ -35,7 +35,18 @@ Toda skill nasce com **≥1 cenário + rubrica** em `skills/<categoria>/<skill>/
 
 ## Instalar / atualizar
 
-Depois de adicionar ou editar uma skill, rode `./install.sh` para (re)criar os symlinks em `~/.claude/skills`. Como sao symlinks, edicoes no repo valem na proxima sessao do Claude sem precisar reinstalar.
+`./install.sh` faz tres coisas (idempotente): (1) **symlinka** cada `skills/**/SKILL.md` em `~/.claude/skills/<nome>` - editar a skill no repo reflete direto na proxima sessao, sem reinstalar; (2) **copia** `home-claude/*` para `~/.claude/*` (AGENTS.md, settings.json, statusline, hooks), com backup do que sobrescreve; (3) **arma** o git hook (`core.hooksPath -> githooks`). De quebra, **valida o frontmatter YAML** de cada skill: skill quebrada nao instala e o script sai != 0 - e o "lint" do repo.
+
+Fez ajuste direto no `~/.claude` (settings, statusline, hook)? `./capture.sh` traz de volta pro `home-claude/` (maquina -> repo), reescreve paths do home pra `$HOME` e nao commita - revise o diff e suba via PR (a skill `capturar-config-claude` automatiza isso). Detalhes de portabilidade em `README.md`.
+
+## Setup em maquina nova
+
+Este repo e o **guia**: um agente configura um PC do zero rodando dois passos idempotentes. Nao ha um script unico que faca tudo - de proposito, cada repo cuida do seu dominio.
+
+1. **Claude (skills + config)** - `git clone` deste repo e `./install.sh`.
+2. **Terminal + ferramentas** - `git clone` do repo **`DCCA/ade-stack`** (privado) e `bash setup-ade-stack.sh`. E o ambiente de terminal (WezTerm + herdr + yazi + helix + eza + starship, Catppuccin), cross-platform WSL/Linux/macOS.
+
+O agente conduz (resolve conflitos, revisa segredos, pergunta o que for identidade); os scripts fazem o trabalho bruto e repetivel.
 
 ## Git
 
