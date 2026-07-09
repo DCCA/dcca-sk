@@ -46,7 +46,7 @@ Ajustou algo direto em `~/.claude` (settings, statusline, hook)? Traga de volta 
 
 Copia cada arquivo rastreado do `~/.claude` para `home-claude/` (so os que ja existem la), reescreve paths absolutos do home para `$HOME` no `settings.json` (nao vaza `/home/USER`), e nao commita nada - revise com `git diff` e commite voce. Origem custom: `CLAUDE_HOME=/x ./capture.sh`.
 
-Numa maquina nova: clone o repo, rode `./install.sh`, e o Claude Code ja sobe com suas instrucoes, settings, statusline e hooks. Os **plugins** (superpowers, ponytail, vercel, ...) sao restaurados sozinhos pelo `settings.json` (`enabledPlugins` + `extraKnownMarketplaces`).
+Numa maquina nova: clone o repo, rode `./install.sh`, e o Claude Code ja sobe com suas instrucoes, settings, statusline e hooks. Os **plugins** (superpowers, ponytail, vercel, ...) sao restaurados sozinhos pelo `settings.json` (`enabledPlugins` + `extraKnownMarketplaces`). Para o ambiente de **terminal** (WezTerm + herdr + yazi + helix + eza + starship, Catppuccin, cross-platform WSL/Linux/macOS), clone tambem o repo `DCCA/ade-stack` (privado) e rode `bash setup-ade-stack.sh`. Runbook completo dos dois passos em [`CLAUDE.md`](CLAUDE.md) ("Setup em maquina nova").
 
 Destinos customizaveis: `CLAUDE_SKILLS_DIR=/x CLAUDE_HOME=/y ./install.sh`.
 
