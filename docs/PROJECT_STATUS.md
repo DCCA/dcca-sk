@@ -4,6 +4,29 @@ Logbook do repositório. Entradas em ordem reversa (mais recente no topo). Cada 
 
 ---
 
+## 2026-07-09 - ade-stack (ambiente de terminal) vira repo separado; dcca-sk vira orquestrador
+
+**Where we were:** dcca-sk guardava skills + config portátil do `~/.claude`, mas o CLAUDE.md descrevia só a metade das skills (dizia que `install.sh` só cria symlinks) e não havia ambiente de terminal versionado. Trazido um zip `ade-stack` (WezTerm + herdr + yazi + helix + eza + starship, Catppuccin) com uma tarefa embutida de publicá-lo.
+
+**What we did:**
+- **ade-stack publicado como repo separado privado** (`DCCA/ade-stack`), com o commit-base como estava, sem modificar. (ade-stack `a4b2cdb`)
+- **ade-stack cross-platform, 2 rodadas** (breakages achados por dogfood em containers Debian 12 + Ubuntu 24.04, não por chute):
+  - arm64: detecção de `uname -m` nos downloads de release (yazi/helix/eza); herdr no macOS via installer próprio (não existe fórmula brew). (ade-stack #1)
+  - yazi `-gnu` → `-musl` (o `-gnu` exige GLIBC_2.39 e quebra no Debian 12/glibc 2.36); `git` nos prereqs (o `ya pkg add` do flavor precisa dele); `theme.toml` aponta pro flavor **só se ele instalou** (senão yazi brica no boot); helix PPA→release com fallback + guarda de versão vazia (API rate-limited); herdr/starship avisam e seguem em vez de abortar o run inteiro. (ade-stack #2)
+- **dcca-sk vira o guia/orquestrador**: CLAUDE.md corrigido (`install.sh` também copia `home-claude/` pro `~/.claude`, arma o git hook e valida o frontmatter YAML - o "lint"; cita `capture.sh`) + nova seção **"Setup em maquina nova"** (runbook de 2 passos: `./install.sh` p/ Claude, `ade-stack` + `setup-ade-stack.sh` p/ terminal). (#26) README sincronizado com o runbook. (#27)
+- **Dogfood do runbook completo** em Ubuntu 24.04 e Debian 12 (fresh): os 2 passos rodam limpos, os 5 binários instalam **e executam**, exit 0. Os "problemas" do 1º round (hook não armado, "WSL2" detectado num container, tools MISSING) eram artefatos do método (docker cp com uid 1000 → dubious ownership; kernel WSL compartilhado; guard não-interativo do `.bashrc`), não bugs de produto.
+
+**Decisions:**
+- **Dois repos, não merge**: cada repo um propósito (regra do próprio dcca-sk); ade-stack já é limpo, standalone e cheio de binários. dcca-sk é o guia que orquestra os dois domínios.
+- **Manter os `.sh`, o agente é que dirige**: a preocupação de "muito .sh" se resolve com o agente rodando os scripts idempotentes via runbook, não apagando os scripts (re-derivar `cp`/`ln` à mão é mais frágil).
+- **musl > gnu por portabilidade** onde houve evidência (yazi quebrou); eza fica em `-gnu` (roda no Debian 12, sem sinal de quebra) - evidência, não especulação.
+
+**Pending / next:**
+- [ ] ade-stack em **ARM Ubuntu**: o helix PPA pode não ter arm64; agora cai pro release binary, mas esse fallback não foi testado em hardware ARM real (sem máquina ARM).
+- [ ] O passo `git clone` do runbook não foi dogfoodado (repos foram copiados pros containers, não clonados - é trivial/só auth).
+- [ ] ade-stack não tem logbook próprio; por ora seu histórico fica registrado aqui (PRs #1/#2).
+- [ ] Herdado: `config.example.md` + `config.md` gitignored pras outras 6 skills; promover skills do backlog do `SKILLS-MAP.md` conforme tração.
+
 ## 2026-07-03 - Skill capturar-config-claude, teste de trigger, e security scan em 2 camadas
 
 **Where we were:** Setup portátil do `~/.claude` já no repo (config por cópia + `capture.sh`), statusline nova. Faltava: transformar o `capture.sh` numa skill, validar que ela é efetiva, e garantir que nada sensível vaze neste repo público.
