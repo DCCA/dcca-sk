@@ -4,6 +4,28 @@ Logbook do repositório. Entradas em ordem reversa (mais recente no topo). Cada 
 
 ---
 
+## 2026-07-18 - dcca-sk vira dotfiles versionado de IA: skills registry + config layer
+
+**Where we were:** Depois da poda, o dcca-sk tinha 2 skills + a config portátil só do Claude (`home-claude/`). Objetivo desta rodada: transformar o repo num **setup de IA versionado e instalado por agente** - skills (próprias + referenciadas) e config de todas as ferramentas de IA - construído em PRs pequenos.
+
+**What we did:**
+- **Skills registry** (#31, fix #32): `skills/registry` = ponteiros pra skills externas, provisionadas pelo `install.sh`. Tipos: `plugin` (verifica enabledPlugins), `git` (clona), `npx` (`npx skills add`), `npm` (`npm -g`). Seed: superpowers/taste/openspec; + `impeccable` (#34). Fix #32: o `npx` roda do `$HOME` (global, sem poluir o repo) - o skills CLI instala no `.agents/` do cwd.
+- **Config layer** (#33): `home-claude/` -> `dotfiles/claude/` + `dotfiles/manifest` (`tool | target-linux | target-mac | target-wsl | excludes | mode`). `install.sh`/`capture.sh` dirigidos por manifest (por-OS, expande `~` e `$WINHOME`, pula excludes). Capturou o drift vivo do `~/.claude` (um `model` preference).
+- **Codex** (#35): base portátil curada `dotfiles/codex/config.toml` + novo **mode `seed`** (só escreve se o target nao existe, nunca captura) - porque o config.toml mistura settings portáteis com a trust list `[projects]` privada + paths `/home`.
+- **VS Code** (#36): `dotfiles/vscode/{settings.json, extensions.txt}`, `seed`, token `$WINHOME` (WSL -> `Code/User` do Windows via `wslpath`) + passo `code --install-extension`.
+
+**Decisions:**
+- **Abordagem A (manifest), não chezmoi**: preserva o modelo de cópia + security scan; os ganhos do chezmoi (templating/segredo cifrado) não valem nesta escala (poucos tools, segredo fica de fora, não cifrado).
+- **dcca-sk ampliado** de "config do Claude" pra "config de todas as ferramentas de IA"; o ade-stack (terminal) fica separado.
+- **`seed` mode** pra config que acumula estado local (trust do Codex, tweaks por-máquina do VS Code): nunca sobrescreve, nunca captura. Reutilizável.
+- **Referência, não vendor** pras skills externas (registry = ponteiros); segredo fica FORA (excludes + scan; token em URL derruba o scan). Codex/VS Code: só a fatia portátil viaja (sem projetos/paths privados).
+
+**Pending / next:**
+- [ ] **Piece 5: shell/git AI glue** (`dotfiles/shell/ai.sh` sourceado, coexiste com o bloco do ade-stack). Última peça do config layer.
+- [ ] **Sync da `daily-review`** - ainda esperando a versão da máquina do trabalho.
+- [ ] Nit: `dotfiles/vscode/settings.json` está 755 (veio do mount `/mnt/c`) - `chmod 644`.
+- [ ] Herdado: subdir em git-skill do registry adiado; `capturar-config-claude` sem linha no `evals/RESULTS.md`.
+
 ## 2026-07-18 - Terminal selector no ade-stack + poda das skills não usadas
 
 **Where we were:** Depois da entrada de 2026-07-09 (#28), o ade-stack estava publicado (privado) e resiliente cross-distro, e o dcca-sk era o orquestrador. Mas o ade-stack só configurava WezTerm, e o dcca-sk ainda tinha 8 skills - a maioria sem uso real.
