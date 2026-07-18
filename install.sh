@@ -11,6 +11,11 @@ REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SKILLS_SRC="$REPO_DIR/skills"
 TARGET="${CLAUDE_SKILLS_DIR:-$HOME/.claude/skills}"
 
+# OS (para escolher o target por-OS no manifest de config, dotfiles/manifest)
+OS="linux"; IS_WSL=0
+[ "$(uname -s)" = "Darwin" ] && OS="mac"
+grep -qi microsoft /proc/version 2>/dev/null && IS_WSL=1
+
 mkdir -p "$TARGET"
 
 # Valida o frontmatter de um SKILL.md. Escreve o motivo no stdout; retorna 0 (ok) ou 1 (invalido).
@@ -90,41 +95,47 @@ done < <(find "$SKILLS_SRC" -name SKILL.md -print0 | sort -z)
 echo
 echo "Concluido: $linked linkada(s), $skipped pulada(s), $invalid invalida(s). Destino: $TARGET"
 
-# --- Config portatil (~/.claude) -------------------------------------------
-# COPIA cada arquivo de home-claude/ para ~/.claude (arquivos reais, nao symlink).
-# O repo e a copia-mestra; o install "instala" essa copia na maquina, que fica
-# independente do repo. Um arquivo real ja existente e DIFERENTE e salvo em
-# ~/.claude/backups/ antes de ser sobrescrito; se ja for identico, nao faz nada.
-# Symlinks de versoes antigas sao removidos. Destino custom: CLAUDE_HOME.
-CONFIG_SRC="$REPO_DIR/home-claude"
-CONFIG_TARGET="${CLAUDE_HOME:-$HOME/.claude}"
+# --- Config portatil (dotfiles/ dirigido por manifest) ---------------------
+# Para cada tool no dotfiles/manifest: COPIA dotfiles/<tool>/ -> target do tool
+# (coluna por OS), pulando os excludes (segredo/estado local). Arquivo real ja
+# existente e DIFERENTE vai pra backups/ antes de sobrescrever; identico nao mexe;
+# symlink de versao antiga e removido. CLAUDE_HOME sobrescreve o target do 'claude'.
+cfg_trim() { local s="$1"; s="${s#"${s%%[![:space:]]*}"}"; s="${s%"${s##*[![:space:]]}"}"; printf '%s' "$s"; }
+MANIFEST="$REPO_DIR/dotfiles/manifest"
 cfg_copied=0
 cfg_kept=0
-
-if [[ -d "$CONFIG_SRC" ]]; then
-  backup_dir="$CONFIG_TARGET/backups/config-$(date +%Y%m%d-%H%M%S)"
-  while IFS= read -r -d '' src; do
-    rel="${src#"$CONFIG_SRC"/}"
-    dst="$CONFIG_TARGET/$rel"
-    mkdir -p "$(dirname "$dst")"
-
-    if [[ -L "$dst" ]]; then
-      rm -f "$dst"                        # remove symlink de versoes antigas
-    elif [[ -f "$dst" ]]; then
-      if cmp -s "$src" "$dst"; then
-        cfg_kept=$((cfg_kept + 1))
-        continue                          # ja identico: nao mexe
+if [[ -f "$MANIFEST" ]]; then
+  while IFS='|' read -r m_tool m_lin m_mac m_wsl m_excl; do
+    m_tool="$(cfg_trim "$m_tool")"
+    [[ -z "$m_tool" || "$m_tool" == \#* ]] && continue
+    if [[ "$OS" == "mac" ]]; then target="$(cfg_trim "$m_mac")"
+    elif [[ "$IS_WSL" == 1 ]]; then target="$(cfg_trim "$m_wsl")"
+    else target="$(cfg_trim "$m_lin")"; fi
+    [[ "$target" == "-" || -z "$target" ]] && { echo "config: $m_tool pulado neste OS"; continue; }
+    if [[ "$m_tool" == "claude" && -n "${CLAUDE_HOME:-}" ]]; then target="$CLAUDE_HOME"; fi
+    target="${target/#\~/$HOME}"
+    src="$REPO_DIR/dotfiles/$m_tool"
+    [[ -d "$src" ]] || { echo "AVISO: dotfiles/$m_tool ausente - pulando" >&2; continue; }
+    excl=",$(cfg_trim "$m_excl"),"
+    backup_dir="$target/backups/config-$(date +%Y%m%d-%H%M%S)"
+    while IFS= read -r -d '' src_f; do
+      rel="${src_f#"$src"/}"; top="${rel%%/*}"
+      case "$excl" in *",$rel,"*|*",${rel##*/},"*|*",$top,"*) continue;; esac
+      dst="$target/$rel"
+      mkdir -p "$(dirname "$dst")"
+      if [[ -L "$dst" ]]; then rm -f "$dst"
+      elif [[ -f "$dst" ]]; then
+        if cmp -s "$src_f" "$dst"; then cfg_kept=$((cfg_kept + 1)); continue; fi
+        mkdir -p "$(dirname "$backup_dir/$rel")"
+        cp "$dst" "$backup_dir/$rel"
+        echo "config backup:     $m_tool/$rel"
       fi
-      mkdir -p "$(dirname "$backup_dir/$rel")"
-      cp "$dst" "$backup_dir/$rel"        # backup do arquivo real antes de sobrescrever
-      echo "config backup:     $rel -> ${backup_dir#"$CONFIG_TARGET"/}"
-    fi
-
-    cp "$src" "$dst"
-    echo "config copiado:    $rel"
-    cfg_copied=$((cfg_copied + 1))
-  done < <(find "$CONFIG_SRC" -type f -print0 | sort -z)
-  echo "Config: $cfg_copied copiado(s), $cfg_kept ja atual(is). Destino: $CONFIG_TARGET"
+      cp "$src_f" "$dst"
+      echo "config copiado:    $m_tool/$rel"
+      cfg_copied=$((cfg_copied + 1))
+    done < <(find "$src" -type f -print0 | sort -z)
+  done < "$MANIFEST"
+  echo "Config: $cfg_copied copiado(s), $cfg_kept ja atual(is)."
 fi
 
 # --- Git hooks deste repo ---------------------------------------------------
@@ -143,8 +154,8 @@ fi
 REGISTRY="$REPO_DIR/skills/registry"
 if [[ -f "$REGISTRY" ]]; then
   echo
-  settings="$CONFIG_TARGET/settings.json"
-  [[ -f "$settings" ]] || settings="$REPO_DIR/home-claude/settings.json"
+  settings="${CLAUDE_HOME:-$HOME/.claude}/settings.json"
+  [[ -f "$settings" ]] || settings="$REPO_DIR/dotfiles/claude/settings.json"
   r_git=0; r_npx=0; r_npm=0; r_plugin=0; r_warn=0
   reg_warn() { echo "AVISO: $1" >&2; r_warn=$((r_warn + 1)); }
   while IFS= read -r line || [[ -n "$line" ]]; do

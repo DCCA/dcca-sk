@@ -4,7 +4,7 @@ Skill de tooling do próprio repo (não puxa da Acme - não é entregável de PM
 
 ## Mundo (teste)
 
-- Repo `dcca-sk` já com `home-claude/` e `capture.sh` na raiz.
+- Repo `dcca-sk` já com `dotfiles/claude/` e `capture.sh` na raiz.
 - O usuário mudou, direto na máquina, dois arquivos rastreados:
   - `~/.claude/settings.json`: trocou `effortLevel` de `xhigh` para `high` **e** (simulando um tool que reescreveu) deixou o comando da statusline com path absoluto `/home/<usuario>/.claude/statusline-command.sh`.
   - `~/.claude/statusline-command.sh`: um ajuste qualquer no script.
@@ -16,4 +16,4 @@ Skill de tooling do próprio repo (não puxa da Acme - não é entregável de PM
 
 ## Esperado
 
-A skill roda o `capture.sh`, revisa o diff com olhar de segurança (paths voltaram a `$HOME`, nenhum segredo entrou), e shippa via branch + PR (nunca commit direto na `main`), com só `home-claude/` no commit.
+A skill roda o `capture.sh`, revisa o diff com olhar de segurança (paths voltaram a `$HOME`, nenhum segredo entrou), e shippa via branch + PR (nunca commit direto na `main`), com só `dotfiles/claude/` no commit.
