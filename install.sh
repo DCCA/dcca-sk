@@ -16,6 +16,16 @@ OS="linux"; IS_WSL=0
 [ "$(uname -s)" = "Darwin" ] && OS="mac"
 grep -qi microsoft /proc/version 2>/dev/null && IS_WSL=1
 
+# Home do Windows (WSL) para os targets '$WINHOME' do manifest (ex: VS Code).
+win_home() {
+  local p=""
+  if command -v wslpath >/dev/null 2>&1 && command -v cmd.exe >/dev/null 2>&1; then
+    p=$(wslpath "$(cmd.exe /c 'echo %USERPROFILE%' 2>/dev/null | tr -d '\r')" 2>/dev/null) || true
+  fi
+  if [[ -n "$p" && -d "$p" ]]; then printf '%s' "$p"; fi
+  return 0
+}
+
 mkdir -p "$TARGET"
 
 # Valida o frontmatter de um SKILL.md. Escreve o motivo no stdout; retorna 0 (ok) ou 1 (invalido).
@@ -114,6 +124,11 @@ if [[ -f "$MANIFEST" ]]; then
     [[ "$target" == "-" || -z "$target" ]] && { echo "config: $m_tool pulado neste OS"; continue; }
     if [[ "$m_tool" == "claude" && -n "${CLAUDE_HOME:-}" ]]; then target="$CLAUDE_HOME"; fi
     target="${target/#\~/$HOME}"
+    if [[ "$target" == *'$WINHOME'* ]]; then
+      wh="$(win_home)"
+      [[ -z "$wh" ]] && { echo "AVISO: $m_tool: home do Windows nao encontrado - pulando" >&2; continue; }
+      target="${target//\$WINHOME/$wh}"
+    fi
     src="$REPO_DIR/dotfiles/$m_tool"
     [[ -d "$src" ]] || { echo "AVISO: dotfiles/$m_tool ausente - pulando" >&2; continue; }
     excl=",$(cfg_trim "$m_excl"),"
@@ -141,6 +156,25 @@ if [[ -f "$MANIFEST" ]]; then
     done < <(find "$src" -type f -print0 | sort -z)
   done < "$MANIFEST"
   echo "Config: $cfg_copied copiado(s), $cfg_kept ja atual(is)."
+fi
+
+# --- VS Code extensions (dotfiles/vscode/extensions.txt) --------------------
+# Extensoes nao sao arquivo de config: instala cada ID via `code --install-extension`
+# (idempotente com --force). Sem o `code` na PATH, avisa e segue.
+VSCODE_EXT="$REPO_DIR/dotfiles/vscode/extensions.txt"
+if [[ -f "$VSCODE_EXT" ]]; then
+  echo
+  if command -v code >/dev/null 2>&1; then
+    ext_n=0; ext_w=0
+    while IFS= read -r ext || [[ -n "$ext" ]]; do
+      ext="$(cfg_trim "${ext%%#*}")"; [[ -z "$ext" ]] && continue
+      if code --install-extension "$ext" --force >/dev/null 2>&1; then ext_n=$((ext_n + 1))
+      else echo "AVISO: falha instalando extensao '$ext'" >&2; ext_w=$((ext_w + 1)); fi
+    done < "$VSCODE_EXT"
+    echo "VS Code: $ext_n extensao(oes) instalada(s)$([ "$ext_w" -gt 0 ] && echo ", $ext_w falha(s)")."
+  else
+    echo "AVISO: 'code' ausente - pulando extensoes do VS Code" >&2
+  fi
 fi
 
 # --- Git hooks deste repo ---------------------------------------------------
