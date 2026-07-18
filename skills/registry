@@ -11,5 +11,5 @@
 # Sem segredos aqui (repo publico): so nomes, URLs e pacotes.
 
 plugin  superpowers                    # obra's superpowers (claude-plugins-official)
-npx     Leonxlnx/taste-skill           # design-taste-frontend - tasteskill.dev
+npx     Leonxlnx/taste-skill           # taste: colecao (design-taste-frontend +12) - tasteskill.dev
 npm     @fission-ai/openspec@latest    # openspec CLI (integracao nativa) - openspec.dev
