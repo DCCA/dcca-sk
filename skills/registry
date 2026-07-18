@@ -13,3 +13,4 @@
 plugin  superpowers                    # obra's superpowers (claude-plugins-official)
 npx     Leonxlnx/taste-skill           # taste: colecao (design-taste-frontend +12) - tasteskill.dev
 npm     @fission-ai/openspec@latest    # openspec CLI (integracao nativa) - openspec.dev
+npx     pbakaus/impeccable             # impeccable: design skill - github.com/pbakaus/impeccable
