@@ -18,6 +18,14 @@ OS="linux"; IS_WSL=0
 [ "$(uname -s)" = "Darwin" ] && OS="mac"
 grep -qi microsoft /proc/version 2>/dev/null && IS_WSL=1
 trim() { local s="$1"; s="${s#"${s%%[![:space:]]*}"}"; s="${s%"${s##*[![:space:]]}"}"; printf '%s' "$s"; }
+win_home() {
+  local p=""
+  if command -v wslpath >/dev/null 2>&1 && command -v cmd.exe >/dev/null 2>&1; then
+    p=$(wslpath "$(cmd.exe /c 'echo %USERPROFILE%' 2>/dev/null | tr -d '\r')" 2>/dev/null) || true
+  fi
+  if [[ -n "$p" && -d "$p" ]]; then printf '%s' "$p"; fi
+  return 0
+}
 
 [[ -f "$MANIFEST" ]] || { echo "manifest ausente: $MANIFEST" >&2; exit 1; }
 
@@ -33,6 +41,10 @@ while IFS='|' read -r m_tool m_lin m_mac m_wsl m_excl m_mode; do
   [[ "$target" == "-" || -z "$target" ]] && continue
   if [[ "$m_tool" == "claude" && -n "${CLAUDE_HOME:-}" ]]; then target="$CLAUDE_HOME"; fi
   target="${target/#\~/$HOME}"
+  if [[ "$target" == *'$WINHOME'* ]]; then
+    wh="$(win_home)"; [[ -z "$wh" ]] && continue
+    target="${target//\$WINHOME/$wh}"
+  fi
   src="$REPO_DIR/dotfiles/$m_tool"
   [[ -d "$src" ]] || continue
   excl=",$(trim "$m_excl"),"

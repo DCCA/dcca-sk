@@ -1,0 +1,24 @@
+{
+    "security.allowedUNCHosts": [
+        "wsl.localhost"
+    ],
+    "liveServer.settings.donotShowInfoMsg": true,
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "git.enableSmartCommit": true,
+    "chat.viewSessions.orientation": "stacked",
+    "git.autofetch": true,
+    "git.confirmSync": false,
+    "python.analysis.typeCheckingMode": "basic",
+    "workbench.iconTheme": "catppuccin-mocha",
+    "makefile.configureOnOpen": true,
+    "gitlens.ai.model": "vscode",
+    "gitlens.ai.vscode.model": "copilot:gpt-4.1",
+    "editor.allowVariableFonts": false,
+    "editor.fontFamily": "MesloLGL Nerd Font, Consolas, 'Courier New', monospace",
+    "githubPullRequests.pushBranch": "always",
+    "workbench.colorTheme": "Catppuccin Mocha",
+    "peacock.surpriseMeOnStartup": true,
+    "remote.autoForwardPortsSource": "hybrid",
+    "claudeCode.preferredLocation": "panel",
+    "claudeCode.useTerminal": true
+}
