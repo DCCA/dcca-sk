@@ -1,69 +1,28 @@
 # Mapa de Skills
 
-Planejamento das agent skills deste repositório: o que construir, em que ordem, e onde estão as fronteiras (cada skill = um propósito, sem gatilhos colidindo). Foco **lean**: um núcleo essencial pequeno; o resto fica no backlog até ganhar tração.
+Planejamento das agent skills deste repositório. Foco **lean**: só o que eu realmente uso fica instalado; o resto é ideia parada até virar recorrente.
 
-**Princípio agnóstico a empresa:** nenhuma skill carrega configuração final (nomes, canais, produtos, métricas, ferramentas). O método/estrutura fica fixo; só a calibração, o glossário, as ferramentas e os destinos viram config. Assim as skills são portáteis entre empregos.
+**Princípio agnóstico a empresa:** nenhuma skill carrega configuração final (nomes, canais, produtos, métricas, ferramentas). O método/estrutura fica fixo; só a calibração, o glossário e os destinos viram config. Assim as skills são portáteis entre empregos.
 
-Status: **feito** · **núcleo** (construir agora) · **backlog** (depois) · **fundida** · **cortada**.
+## Em uso
 
-## Feito
+- `daily-review` (produto) - fecha o dia anterior e prepara o atual a partir das fontes conectadas (calendário, e-mail, Slack, GitHub, rastreador, transcrições). Pessoal e interno.
+- `capturar-config-claude` (dev) - traz mudanças do `~/.claude` de volta pro repo (roda `capture.sh`, revisa o diff sem vazar segredo/path, sobe via PR). Infra do próprio repo.
 
-- `daily-review` (produto) - fecha o dia anterior e prepara o atual a partir das fontes conectadas (calendário, e-mail, Slack, GitHub, Jira/rastreador, transcrições). Pessoal e interno.
-- `metric-definition` (produto) - produz a metric spec (fonte única de verdade de uma métrica): expõe decisões escondidas, reconcilia divergências, não inventa número.
-- `weekly-metrics-digest` (produto) - resumo semanal das métricas virado para o sinal: variação WoW, anomalias com hipótese, guardrails, lacunas de dado. Só a metade quantitativa.
-- `priorizacao` (produto) - fila auditável (RICE): escala calibrada antes de pontuar, premissa por nota, baixa confiança vira discovery.
-- `prd-writer` (produto) - PRD com problema e métrica de sucesso antes da solução; reconstrói pedido que chega como solução; marca o que é aberto/assumido.
-- `derive-tech-spec` (dev) - plano técnico derivado do PRD; cada decisão rastreia a um requisito; supõe o codebase com (assumido); fatia em entregas ponta a ponta.
-- `status-update` (escrita) - update BLUF com farol honesto, riscos e asks explícitos; não infla.
+## Removidas (construídas, não usadas)
 
-## Núcleo essencial - completo
+Um núcleo de "geradores de artefato de PM" foi construído e validado por eval, mas **não pegou tração no uso real**, então saiu do repo (histórico preservado no git): `metric-definition`, `weekly-metrics-digest`, `priorizacao`, `prd-writer`, `derive-tech-spec`, `status-update`.
 
-As 6 skills do núcleo estão feitas, formando a espinha **métrica -> número -> decisão -> spec -> build -> reporte** (`metric-definition` -> `weekly-metrics-digest` -> `priorizacao` -> `prd-writer` -> `derive-tech-spec` -> `status-update`). Cada uma validada por eval. O que vem agora sai do **backlog** abaixo, conforme tração e necessidade.
+**Lição:** construir uma skill quando a tarefa vira recorrente, não especulativamente. Passar na eval não é sinal de que vai ser usada. O gatilho para (re)construir qualquer uma - destas ou do backlog abaixo - é o mesmo: virou rotina de verdade.
 
-## Backlog (depois - não some, só sai do foco)
+## Ideias paradas (backlog, não construídas)
 
-Critério para promover do backlog: virou recorrente, ou uma dependência do núcleo passou a precisar.
+Não somem, só não estão em foco. Promover só quando a necessidade for real e recorrente.
 
-**Discovery / pesquisa** (episódico, por ciclo)
-- `discovery-synthesis` - síntese rigorosa de pesquisa (fato x interpretação, evidência, JTBD).
-- `interview-guide` - o "antes" do discovery; construir como par com a `discovery-synthesis`.
-
-**Experimentação** (quando houver A/B; dependem de `metric-definition`)
-- `instrument-analytics` - feature nasce mensurável. 1º candidato a promover.
-- `experiment-design` - pré-registra hipótese e amostra. Par com o readout.
-- `experiment-readout` - leitura do A/B vira decisão defensável.
-- `funnel-cohort-analysis` - funil/coorte; investigação pontual (o digest cobre o número semanal).
-
-**Planejamento** (trimestral)
-- `roadmap-planning` - now/next/later ligado a objetivos.
-- `okr-drafting` - redige metas; avaliar fundir no `roadmap-planning`.
-- `growth-loop-mapping` - modelo causal do crescimento; estratégico ocasional.
-
-**Lançamento** (só em launches; pacote único)
-- `launch-checklist` - checagem repetível; sucesso e rollback definidos. Absorve o QA-como-usuário.
-- `launch-announcement` - anúncio por audiência; consome a `release-notes`.
-
-**Registro / incidente** (baixa frequência)
-- `product-decision-log` - ADR de produto; pode começar como doc simples.
-- `postmortem` - RCA blameless após incidente.
-
-**Escrita / comunicação**
-- `one-pager` - buy-in pré-PRD.
-- `stakeholder-message` - comunicação sensível (atraso, "não", escalar).
-
-**Dev / higiene**
-- `pr-description` - padroniza PRs; mais snippet que skill.
-- `release-notes` - changelog derivado do git; baixa frequência.
-- `tech-feasibility` - sizing ocasional; sobrepõe ao `derive-tech-spec`.
-
-## Cortada / fundida
-
-- **Cortada:** `product-acceptance-review` - duplicava o eixo Spec de um review genérico; o QA-como-usuário foi dobrado no `launch-checklist`.
-- **Fundida:** `stakeholder-update` -> `status-update` (mesmo artefato; a `status-update` herdou "adaptar tom por audiência"). `executive-summary` -> embutida onde for usada (BLUF dentro de `status-update` e `one-pager`), não standalone.
-
-## Fronteiras (colisões de gatilho resolvidas)
-
-- `daily-review` x `status-update` x `weekly-metrics-digest`: pessoal/agenda x andamento externo x métricas de negócio.
-- `prd-writer` x `one-pager`: spec completa x doc leve de buy-in pré-PRD.
-- `release-notes` x `launch-announcement`: deriva changelog do git x consome e foca na mensagem por público.
-- `funnel-cohort-analysis` x `growth-loop-mapping`: diagnóstico tático x mapa do motor (modelo causal).
+- **Discovery:** `discovery-synthesis`, `interview-guide`.
+- **Experimentação:** `instrument-analytics`, `experiment-design`, `experiment-readout`, `funnel-cohort-analysis`.
+- **Planejamento:** `roadmap-planning`, `okr-drafting`, `growth-loop-mapping`.
+- **Lançamento:** `launch-checklist`, `launch-announcement`.
+- **Registro / incidente:** `product-decision-log`, `postmortem`.
+- **Escrita:** `one-pager`, `stakeholder-message`.
+- **Dev / higiene:** `pr-description`, `release-notes`, `tech-feasibility`.
