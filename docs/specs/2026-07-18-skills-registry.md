@@ -39,7 +39,7 @@ symlink loop - no conflict with own-skill symlinking.
 Read `skills/registry`; dispatch per line by type into the skills target
 (`$TARGET`, default `~/.claude/skills`):
 
-- **plugin** → check `<plugin-name>` is in `home-claude/settings.json`
+- **plugin** → check `<plugin-name>` is in `dotfiles/claude/settings.json`
   `enabledPlugins`. Missing ⇒ `c_warn` (settings.json is the real installer;
   this is a consistency check only). Read-only.
 - **git** → if `$TARGET/<name>` is a git repo: `git -C … pull --ff-only`; else
