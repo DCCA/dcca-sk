@@ -1,6 +1,6 @@
 # Empresa fictícia: Acme
 
-Empresa de mentira, coerente e reutilizável, para testar as skills sem dados reais e sem conector. **Tudo aqui é inventado.** Os cenários de eval de cada skill puxam deste universo, então o mundo é o mesmo entre skills (a `daily-review`, o `status-update` e o `weekly-metrics-digest` testam contra a mesma Acme).
+Empresa de mentira, coerente e reutilizável, para testar as skills sem dados reais e sem conector. **Tudo aqui é inventado.** Os cenários de eval puxam deste universo (hoje a `daily-review`); qualquer skill futura que precise de um mundo de mentira reutiliza esta mesma Acme, mantendo os cenários coerentes entre si.
 
 Mantenha a Acme estável: mudar uma persona ou métrica aqui afeta todos os cenários que dependem dela.
 
