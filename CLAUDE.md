@@ -35,7 +35,7 @@ Toda skill nasce com **≥1 cenário + rubrica** em `skills/<categoria>/<skill>/
 
 ## Instalar / atualizar
 
-`./install.sh` faz tres coisas (idempotente): (1) **symlinka** cada `skills/**/SKILL.md` em `~/.claude/skills/<nome>` - editar a skill no repo reflete direto na proxima sessao, sem reinstalar; (2) **copia** `home-claude/*` para `~/.claude/*` (AGENTS.md, settings.json, statusline, hooks), com backup do que sobrescreve; (3) **arma** o git hook (`core.hooksPath -> githooks`). De quebra, **valida o frontmatter YAML** de cada skill: skill quebrada nao instala e o script sai != 0 - e o "lint" do repo.
+`./install.sh` faz quatro coisas (idempotente): (1) **symlinka** cada `skills/**/SKILL.md` em `~/.claude/skills/<nome>` - editar a skill no repo reflete direto na proxima sessao, sem reinstalar; (2) **copia** `home-claude/*` para `~/.claude/*` (AGENTS.md, settings.json, statusline, hooks), com backup do que sobrescreve; (3) **arma** o git hook (`core.hooksPath -> githooks`); (4) **provisiona as skills externas** listadas em `skills/registry` (ponteiros: `plugin`/`git`/`npx`/`npm`; falha de item avisa e segue). De quebra, **valida o frontmatter YAML** de cada skill propria: skill quebrada nao instala e o script sai != 0 - e o "lint" do repo.
 
 Fez ajuste direto no `~/.claude` (settings, statusline, hook)? `./capture.sh` traz de volta pro `home-claude/` (maquina -> repo), reescreve paths do home pra `$HOME` e nao commita - revise o diff e suba via PR (a skill `capturar-config-claude` automatiza isso). Detalhes de portabilidade em `README.md`.
 
