@@ -4,6 +4,24 @@ Logbook do repositório. Entradas em ordem reversa (mais recente no topo). Cada 
 
 ---
 
+## 2026-07-18 - Terminal selector no ade-stack + poda das skills não usadas
+
+**Where we were:** Depois da entrada de 2026-07-09 (#28), o ade-stack estava publicado (privado) e resiliente cross-distro, e o dcca-sk era o orquestrador. Mas o ade-stack só configurava WezTerm, e o dcca-sk ainda tinha 8 skills - a maioria sem uso real.
+
+**What we did:**
+- **ade-stack: seletor de terminal plugável.** Flag `--terminal auto|all|none|<csv>` (+ `$ADE_TERMINAL`) para `wezterm`, `iterm2`, `windows-terminal` - todos Catppuccin Mocha + JetBrainsMono Nerd Font. iTerm2 ganha um Dynamic Profile auto-carregado; Windows Terminal um fragmento não-destrutivo (não mexe no `settings.json`); wezterm inalterado. `auto` = WezTerm no WSL/Linux, iTerm2 num Mac que o tenha. As 5 ferramentas sempre foram terminal-agnósticas; só o passo [5/5] mudou. Dogfood em containers Debian/Ubuntu: matriz do seletor, validade dos dois JSON (cores Catppuccin corretas), run `--terminal all` exit 0. (ade-stack #3)
+- **dcca-sk: poda de 6 skills não usadas.** Removidas `metric-definition`, `weekly-metrics-digest`, `priorizacao`, `prd-writer`, `derive-tech-spec`, `status-update` (passavam nas evals, mas sem tração). Mantidas `daily-review` + `capturar-config-claude`. Referências limpas: tabela do README, SKILLS-MAP reescrito (`em uso / removidas / backlog`), RESULTS enxugado + nota, `acme.md`. 2 sobreviventes validam, zero referência quebrada. (dcca-sk #29)
+- **Sweep de consistência dos docs:** após a poda, o repo está limpo - sem refs órfãs, contagens erradas ou links quebrados. Único doc atrasado era este logbook (agora atualizado).
+
+**Decisions:**
+- **Terminal é camada plugável por máquina, não hardcoded.** O usuário pediu o seletor completo (não só iTerm2); `auto` mantém WezTerm no WSL como default. iTerm2/WT entregam um perfil pronto que o usuário seleciona uma vez (não força default).
+- **Podar por tração, não por qualidade.** As 6 skills passavam nas evals; foram cortadas por não serem usadas. Lição registrada no SKILLS-MAP: construir skill quando a tarefa vira recorrente, não especulativamente.
+
+**Pending / next:**
+- [ ] **Sync da `daily-review`** (aberto, esperando o usuário): ele customizou a skill na máquina do trabalho; trazer a estrutura melhorada de volta pro repo como `[placeholders]` (repo é público). Precisa da versão do trabalho (colar ou apontar arquivo).
+- [ ] `capturar-config-claude` não tem linha no `evals/RESULTS.md` (tem eval comportamental, mas ficou fora do placar).
+- [ ] ade-stack (herdado): fallback do helix (PPA -> release) não testado em ARM real; configs de iTerm2/WT verificadas por correção de config, não por render de GUI.
+
 ## 2026-07-09 - ade-stack (ambiente de terminal) vira repo separado; dcca-sk vira orquestrador
 
 **Where we were:** dcca-sk guardava skills + config portátil do `~/.claude`, mas o CLAUDE.md descrevia só a metade das skills (dizia que `install.sh` só cria symlinks) e não havia ambiente de terminal versionado. Trazido um zip `ade-stack` (WezTerm + herdr + yazi + helix + eza + starship, Catppuccin) com uma tarefa embutida de publicá-lo.
