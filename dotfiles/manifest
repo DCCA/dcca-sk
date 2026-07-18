@@ -1,10 +1,14 @@
 # Config portatil por tool. O install.sh copia dotfiles/<tool>/ -> target do tool;
 # o capture.sh traz de volta. Delimitado por '|' (paths podem ter espaco).
 #
-#   <tool> | <target-linux> | <target-mac> | <target-wsl> | <exclude,globs>
+#   <tool> | <target-linux> | <target-mac> | <target-wsl> | <exclude,globs> | <mode>
 #
 # target: '~' e expandido; '-' = pular o tool nesse OS; WSL usa <target-wsl>.
 # exclude: arquivos/dirs nunca copiados nem capturados (segredo/estado local).
+# mode  : 'copy' (default, pode omitir) = sobrescreve com backup e o capture traz
+#         de volta. 'seed' = so escreve se o target NAO existe (nunca sobrescreve)
+#         e o capture ignora - pra config que acumula estado local (ex: codex).
 # Adicionar um tool = uma linha + a pasta dotfiles/<tool>/.
 
 claude | ~/.claude | ~/.claude | ~/.claude | .credentials.json,settings.local.json,history.jsonl,sessions,projects
+codex  | ~/.codex  | ~/.codex  | ~/.codex  | auth.json,.credentials.json,history.jsonl | seed

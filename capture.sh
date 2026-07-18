@@ -23,9 +23,10 @@ trim() { local s="$1"; s="${s#"${s%%[![:space:]]*}"}"; s="${s%"${s##*[![:space:]
 
 changed=0
 missing=0
-while IFS='|' read -r m_tool m_lin m_mac m_wsl m_excl; do
+while IFS='|' read -r m_tool m_lin m_mac m_wsl m_excl m_mode; do
   m_tool="$(trim "$m_tool")"
   [[ -z "$m_tool" || "$m_tool" == \#* ]] && continue
+  [[ "$(trim "$m_mode")" == "seed" ]] && continue   # seed: config local, nao captura
   if [[ "$OS" == "mac" ]]; then target="$(trim "$m_mac")"
   elif [[ "$IS_WSL" == 1 ]]; then target="$(trim "$m_wsl")"
   else target="$(trim "$m_lin")"; fi

@@ -105,7 +105,7 @@ MANIFEST="$REPO_DIR/dotfiles/manifest"
 cfg_copied=0
 cfg_kept=0
 if [[ -f "$MANIFEST" ]]; then
-  while IFS='|' read -r m_tool m_lin m_mac m_wsl m_excl; do
+  while IFS='|' read -r m_tool m_lin m_mac m_wsl m_excl m_mode; do
     m_tool="$(cfg_trim "$m_tool")"
     [[ -z "$m_tool" || "$m_tool" == \#* ]] && continue
     if [[ "$OS" == "mac" ]]; then target="$(cfg_trim "$m_mac")"
@@ -117,11 +117,16 @@ if [[ -f "$MANIFEST" ]]; then
     src="$REPO_DIR/dotfiles/$m_tool"
     [[ -d "$src" ]] || { echo "AVISO: dotfiles/$m_tool ausente - pulando" >&2; continue; }
     excl=",$(cfg_trim "$m_excl"),"
+    mode="$(cfg_trim "$m_mode")"
     backup_dir="$target/backups/config-$(date +%Y%m%d-%H%M%S)"
     while IFS= read -r -d '' src_f; do
       rel="${src_f#"$src"/}"; top="${rel%%/*}"
       case "$excl" in *",$rel,"*|*",${rel##*/},"*|*",$top,"*) continue;; esac
       dst="$target/$rel"
+      if [[ "$mode" == "seed" && -e "$dst" ]]; then
+        echo "config seed:       $m_tool/$rel (ja existe - preservado)"
+        cfg_kept=$((cfg_kept + 1)); continue
+      fi
       mkdir -p "$(dirname "$dst")"
       if [[ -L "$dst" ]]; then rm -f "$dst"
       elif [[ -f "$dst" ]]; then

@@ -7,10 +7,11 @@ Thumbs.db
 # Versionamos so o config.example.md; o config.md fica local.
 skills/**/config.md
 
-# Config portatil (~/.claude): NUNCA versionar segredos nem estado local.
-dotfiles/claude/.credentials.json
-dotfiles/claude/settings.local.json
-dotfiles/claude/history.jsonl
+# Config portatil (dotfiles/): NUNCA versionar segredo nem estado local de tool.
+dotfiles/*/.credentials.json
+dotfiles/*/auth.json
+dotfiles/*/settings.local.json
+dotfiles/*/history.jsonl
 
 # Artefatos do skills CLI (npx skills add) e estado local do Claude no repo.
 # As skills externas do skills/registry sao instaladas GLOBALMENTE (~/.agents),
