@@ -46,7 +46,11 @@ Read `skills/registry`; dispatch per line by type into the skills target
   `git clone --depth 1 <url> $TARGET/<name>`. First cut assumes the repo root is
   the skill (`SKILL.md` at root). Name collides with an own-skill symlink ⇒ warn +
   skip.
-- **npx** → `have npx` ? `npx -y skills add <spec>` : warn + skip.
+- **npx** → `have npx` ? `( cd "$HOME" && npx -y skills add <spec> )` : warn + skip.
+  Run from `$HOME`: the skills CLI installs into the **cwd's** `.agents/skills/`,
+  so running elsewhere pollutes that dir; from `$HOME` it lands in the global
+  `~/.agents/skills` (symlinked into `~/.claude/skills`). A `<spec>` may be a
+  **collection** (e.g. taste = design-taste-frontend +12).
 - **npm** → `have npm` ? `npm install -g <spec>` : warn + skip. (Global CLI, not a
   `~/.claude/skills` skill.)
 - Unknown type / malformed line ⇒ warn + skip. Missing `git`/`npx`/`npm` ⇒ warn +

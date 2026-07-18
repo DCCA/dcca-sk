@@ -173,8 +173,10 @@ if [[ -f "$REGISTRY" ]]; then
         else reg_warn "clone falhou em '$ra' ($rb)"; fi ;;
       npx)
         r_npx=$((r_npx + 1))
+        # roda a partir do $HOME: o skills CLI instala no ".agents/skills" do
+        # cwd, entao rodar aqui poluiria o repo - do $HOME vai pro global.
         if ! command -v npx >/dev/null 2>&1; then reg_warn "npx ausente - pulando '$ra'"
-        elif npx -y skills add "$ra" >/dev/null 2>&1; then echo "registry npx:      $ra"
+        elif ( cd "$HOME" && npx -y skills add "$ra" ) >/dev/null 2>&1; then echo "registry npx:      $ra"
         else reg_warn "'npx skills add $ra' falhou"; fi ;;
       npm)
         r_npm=$((r_npm + 1))

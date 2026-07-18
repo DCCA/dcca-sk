@@ -11,3 +11,10 @@ skills/**/config.md
 home-claude/.credentials.json
 home-claude/settings.local.json
 home-claude/history.jsonl
+
+# Artefatos do skills CLI (npx skills add) e estado local do Claude no repo.
+# As skills externas do skills/registry sao instaladas GLOBALMENTE (~/.agents),
+# nunca aqui - o install.sh roda o npx a partir do $HOME.
+.agents/
+skills-lock.json
+.claude/
