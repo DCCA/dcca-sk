@@ -70,3 +70,7 @@ Convencoes completas em [`CLAUDE.md`](CLAUDE.md).
 | `capturar-config-claude` | dev | Traz mudancas feitas no `~/.claude` de volta pro repo: roda `capture.sh`, revisa o diff (sem vazar segredo/path) e sobe via PR. |
 
 Skills removidas (construidas mas nao usadas) e ideias paradas: [`SKILLS-MAP.md`](SKILLS-MAP.md).
+
+### Skills externas que eu uso (referenciadas)
+
+Skills/ferramentas de terceiros que instalo em toda maquina ficam em [`skills/registry`](skills/registry) - **so ponteiros**, nunca o conteudo. O `install.sh` provisiona cada uma: `plugin` (verifica `enabledPlugins`), `git` (clona em `~/.claude/skills`), `npx` (`npx skills add`), `npm` (`npm install -g`). Para adicionar uma, e uma linha no arquivo. Design em [`docs/specs/2026-07-18-skills-registry.md`](docs/specs/2026-07-18-skills-registry.md).

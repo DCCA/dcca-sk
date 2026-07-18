@@ -136,6 +136,57 @@ if git -C "$REPO_DIR" rev-parse --git-dir >/dev/null 2>&1; then
   echo "Git hooks: core.hooksPath -> githooks (security scan no pre-push)."
 fi
 
+# --- Skills/ferramentas referenciadas (registry) ---------------------------
+# Instala o que esta em skills/registry (ponteiros, nao versionado aqui):
+# plugin (verifica enabledPlugins), git (clona em ~/.claude/skills), npx
+# (`npx skills add`), npm (`npm install -g`). Falha de item avisa e segue.
+REGISTRY="$REPO_DIR/skills/registry"
+if [[ -f "$REGISTRY" ]]; then
+  echo
+  settings="$CONFIG_TARGET/settings.json"
+  [[ -f "$settings" ]] || settings="$REPO_DIR/home-claude/settings.json"
+  r_git=0; r_npx=0; r_npm=0; r_plugin=0; r_warn=0
+  reg_warn() { echo "AVISO: $1" >&2; r_warn=$((r_warn + 1)); }
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    line="${line%%#*}"                          # tira comentario
+    line="${line#"${line%%[![:space:]]*}"}"     # ltrim
+    line="${line%"${line##*[![:space:]]}"}"     # rtrim
+    [[ -z "$line" ]] && continue
+    read -r rtype ra rb <<< "$line"
+    case "$rtype" in
+      plugin)
+        r_plugin=$((r_plugin + 1))
+        if grep -Eq "\"${ra}(@[^\"]*)?\"[[:space:]]*:[[:space:]]*true" "$settings" 2>/dev/null; then
+          echo "registry plugin:   $ra (enabled)"
+        else
+          reg_warn "plugin '$ra' nao esta em enabledPlugins ($settings)"
+        fi ;;
+      git)
+        r_git=$((r_git + 1))
+        dest="$TARGET/$ra"
+        if [[ -z "$ra" || -z "$rb" ]]; then reg_warn "git sem nome/URL: '$line'"
+        elif ! command -v git >/dev/null 2>&1; then reg_warn "git ausente - pulando '$ra'"
+        elif [[ -d "$dest/.git" ]]; then
+          if git -C "$dest" pull --ff-only >/dev/null 2>&1; then echo "registry git:      $ra (pull)"; else reg_warn "pull falhou em '$ra'"; fi
+        elif [[ -e "$dest" ]]; then reg_warn "'$dest' ja existe e nao e clone git - pulando '$ra'"
+        elif git clone --depth 1 "$rb" "$dest" >/dev/null 2>&1; then echo "registry git:      $ra (clone)"
+        else reg_warn "clone falhou em '$ra' ($rb)"; fi ;;
+      npx)
+        r_npx=$((r_npx + 1))
+        if ! command -v npx >/dev/null 2>&1; then reg_warn "npx ausente - pulando '$ra'"
+        elif npx -y skills add "$ra" >/dev/null 2>&1; then echo "registry npx:      $ra"
+        else reg_warn "'npx skills add $ra' falhou"; fi ;;
+      npm)
+        r_npm=$((r_npm + 1))
+        if ! command -v npm >/dev/null 2>&1; then reg_warn "npm ausente - pulando '$ra'"
+        elif npm install -g "$ra" >/dev/null 2>&1; then echo "registry npm:      $ra"
+        else reg_warn "'npm install -g $ra' falhou"; fi ;;
+      *) reg_warn "tipo de registry desconhecido '$rtype' (linha: $line)" ;;
+    esac
+  done < "$REGISTRY"
+  echo "Registry: $r_git git, $r_npx npx, $r_npm npm, $r_plugin plugin (avisos: $r_warn). Skills em: $TARGET"
+fi
+
 if [[ "$invalid" -gt 0 ]]; then
   echo "Corrija o frontmatter das skills invalidas e rode de novo." >&2
   exit 1

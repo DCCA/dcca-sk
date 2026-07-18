@@ -1,0 +1,15 @@
+# Registry de skills/ferramentas externas que eu uso - provisionadas pelo
+# install.sh em toda maquina. O repo guarda PONTEIROS, nao o conteudo
+# ("reference, nao vendor"). As minhas skills proprias ficam em skills/.
+#
+# Uma entrada por linha; `#` e comentario; linhas em branco ignoradas.
+#   plugin  <nome>                verifica se esta em settings.json enabledPlugins
+#   git     <nome>  <clone-url>   clona em ~/.claude/skills/<nome> (root = a skill)
+#   npx     <package-spec>        `npx skills add <spec>`
+#   npm     <package-spec>        CLI global: `npm install -g <spec>`
+#
+# Sem segredos aqui (repo publico): so nomes, URLs e pacotes.
+
+plugin  superpowers                    # obra's superpowers (claude-plugins-official)
+npx     Leonxlnx/taste-skill           # design-taste-frontend - tasteskill.dev
+npm     @fission-ai/openspec@latest    # openspec CLI (integracao nativa) - openspec.dev
