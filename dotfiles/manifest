@@ -14,3 +14,4 @@
 claude | ~/.claude | ~/.claude | ~/.claude | .credentials.json,settings.local.json,history.jsonl,sessions,projects
 codex  | ~/.codex  | ~/.codex  | ~/.codex  | auth.json,.credentials.json,history.jsonl | seed
 vscode | ~/.config/Code/User | ~/Library/Application Support/Code/User | $WINHOME/AppData/Roaming/Code/User | extensions.txt | seed
+shell  | ~/.config/dcca-sk | ~/.config/dcca-sk | ~/.config/dcca-sk | - | copy
