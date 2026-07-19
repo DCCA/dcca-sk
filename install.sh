@@ -177,6 +177,25 @@ if [[ -f "$VSCODE_EXT" ]]; then
   fi
 fi
 
+# --- Shell glue de IA: sourceia ai.sh no rc --------------------------------
+# O passo de config (manifest) ja copiou dotfiles/shell/ -> ~/.config/dcca-sk/.
+# Aqui so garante um bloco guardado no rc que sourceia o ai.sh - separado do
+# bloco do ade-stack (terminal). Idempotente (nao duplica).
+AI_GLUE="$HOME/.config/dcca-sk/ai.sh"
+if [[ -f "$AI_GLUE" ]]; then
+  rc="$HOME/.bashrc"; case "${SHELL:-}" in *zsh) rc="$HOME/.zshrc";; esac
+  marker="# >>> dcca-sk ai glue >>>"
+  if [[ -f "$rc" ]] && grep -qF "$marker" "$rc"; then
+    echo "Shell glue: bloco ja presente em $rc (ai.sh atualizado pelo manifest)"
+  else
+    { printf '\n%s\n' "$marker"
+      printf '%s\n' '[ -f "$HOME/.config/dcca-sk/ai.sh" ] && . "$HOME/.config/dcca-sk/ai.sh"'
+      printf '%s\n' "# <<< dcca-sk ai glue <<<"
+    } >> "$rc"
+    echo "Shell glue: bloco adicionado em $rc (sourceia ~/.config/dcca-sk/ai.sh)"
+  fi
+fi
+
 # --- Git hooks deste repo ---------------------------------------------------
 # Arma o security scan no pre-push (repo publico: nada de segredo/PII no push).
 # core.hooksPath e config local do clone, entao precisa ser setado por clone.
