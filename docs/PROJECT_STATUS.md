@@ -4,6 +4,24 @@ Logbook do repositório. Entradas em ordem reversa (mais recente no topo). Cada 
 
 ---
 
+## 2026-07-19 - Fecha o config layer (shell glue) + nits + plugin openai codex
+
+**Where we were:** O plano "setup de IA como dotfiles" estava quase completo (07-18): faltava a última peça (shell glue), uns nits, e nem tudo estava ativado nesta máquina.
+
+**What we did:**
+- **Piece 5: shell/git AI glue** (#38): `dotfiles/shell/ai.sh` (template, sem alias inventado - o usuário não tinha glue nenhum) + linha no manifest (`shell`, mode copy -> `~/.config/dcca-sk`) + passo no `install.sh` que adiciona um bloco guardado no rc sourceando o `ai.sh`, **separado do bloco do ade-stack**. Idempotente, coexiste. **Config layer completo**: claude (copy) / codex (seed) / vscode (seed, WSL->Windows) / shell (copy + source no rc). Ativado nesta máquina (`ai.sh` + bloco no `~/.zshrc`).
+- **Nits** (#39): `dotfiles/vscode/settings.json` 755 -> 644; linha do `capturar-config-claude` (8/8, 2026-07-03) no `evals/RESULTS.md`.
+- **Plugin openai `codex-plugin-cc`** (#40): plugin do Claude Code que delega review/tasks pro Codex (`/codex:review`, `/codex:adversarial-review`, `/codex:rescue`). Viaja via settings.json: `extraKnownMarketplaces += openai-codex` (repo `openai/codex-plugin-cc`) + `enabledPlugins += codex@openai-codex`; capturado no `dotfiles/claude/settings.json` + linha `plugin` no `skills/registry`. Habilitado na config viva desta máquina.
+
+**Decisions:**
+- Shell glue = **mecanismo + template**, não aliases inventados (YAGNI); bloco guardado próprio, separado do ade-stack (um domínio cada).
+- Plugin **viaja por settings.json** (mecanismo real de install); a linha no registry é só verify/documentação.
+
+**Pending / next:**
+- [ ] Ativar o `codex-plugin-cc` nesta máquina na sessão do CC: `/reload-plugins` (ou restart) + `/codex:setup` (slash commands, o usuário roda).
+- [ ] **Sync da `daily-review`** - ainda esperando a versão da máquina do trabalho.
+- [ ] `dotfiles/shell/ai.sh` é template vazio - preencher com aliases/funções de IA conforme surgirem.
+
 ## 2026-07-18 - dcca-sk vira dotfiles versionado de IA: skills registry + config layer
 
 **Where we were:** Depois da poda, o dcca-sk tinha 2 skills + a config portátil só do Claude (`home-claude/`). Objetivo desta rodada: transformar o repo num **setup de IA versionado e instalado por agente** - skills (próprias + referenciadas) e config de todas as ferramentas de IA - construído em PRs pequenos.
