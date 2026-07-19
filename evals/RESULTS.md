@@ -9,6 +9,7 @@ Placar = invariantes + armadilhas da rubrica. "PASS" = todos verdes, zero alucin
 | Skill | Data | Placar | Resultado |
 |-------|------|--------|-----------|
 | `daily-review` | 2026-06-29 | 11/11 invariantes + 3/3 armadilhas | PASS |
+| `capturar-config-claude` | 2026-07-03 | 8/8 invariantes (rubrica comportamental) | PASS |
 
 ## Notas
 
