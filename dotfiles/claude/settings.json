@@ -5,6 +5,7 @@
       "mcp__pencil"
     ]
   },
+  "model": "claude-fable-5[1m]",
   "hooks": {
     "SessionStart": [
       {
@@ -21,7 +22,8 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "sh $HOME/.claude/statusline-command.sh"
+    "command": "sh $HOME/.claude/statusline-command.sh",
+    "refreshInterval": 60
   },
   "enabledPlugins": {
     "imessage@claude-plugins-official": true,
@@ -49,6 +51,5 @@
   "effortLevel": "xhigh",
   "tui": "fullscreen",
   "skipWorkflowUsageWarning": true,
-  "agentPushNotifEnabled": true,
-  "model": "claude-fable-5[1m]"
+  "agentPushNotifEnabled": true
 }
