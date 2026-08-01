@@ -22,7 +22,7 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "bash \"$HOME/.claude/statusline.sh\"",
+    "command": "CLAUDE_STATUSLINE_NERDFONT=1 CLAUDE_STATUSLINE_POWERLINE=0 bash \"$HOME/.claude/statusline.sh\"",
     "refreshInterval": 60
   },
   "enabledPlugins": {
