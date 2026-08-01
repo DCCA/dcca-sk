@@ -58,11 +58,13 @@ if [[ "$USE_ASCII" == "1" ]]; then
   SEP=" | "
 elif [[ "$USE_NERDFONT" == "1" ]]; then
   S_BRAND="◆"
-  S_BRANCH=" "
+  # Patch local: upstream perdeu os icones BMP-PUA (E0A0 etc.) - o arquivo tem
+  # espacos literais. Usamos icones MD do plano 15 (U+F0000+), que renderizam.
+  S_BRANCH="󰘬 "
   S_WARN=" 󰀦"
   S_PROMPT="❯"
   S_TIME="󰔟 "
-  S_COST=" "
+  S_COST="󰄔 "
   if [[ "$USE_POWERLINE" == "1" ]]; then
     SEP="  "
   else
@@ -254,7 +256,9 @@ fi
 # Git 分支與髒標記（帶快取）
 # ═══════════════════════════════════════════════════════════════
 
-GIT_CACHE="/tmp/claude-statusline-git-cache"
+# Patch local: cache por diretorio (upstream usa um arquivo global - com varias
+# sessoes simultaneas uma statusline mostrava o branch da outra).
+GIT_CACHE="${TMPDIR:-/tmp}/claude-statusline-git-$(id -u)-$(printf '%s' "${cwd_full:-}" | cksum | cut -d' ' -f1)"
 GIT_CACHE_MAX_AGE=5
 
 git_branch="${branch:-}"
