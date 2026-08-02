@@ -60,12 +60,16 @@ Default to delegating work that doesn't need to happen in the main context. The 
 
 Default the floor high, reserve the ceiling. Pick the model to fit the task's difficulty and horizon, not one tier for everything.
 
-- **Opus 4.8** - default for the main thread and any substantive delegated work: design, hard debugging, code review, architecture, anything accuracy-critical.
-- **Sonnet 5** - routine-but-real subagents: straightforward edits, standard analysis, and research that explains how existing code or behavior works (tracing a flow, mapping a subsystem). Pure mechanical search is Haiku; research that feeds a hard design or correctness decision is Opus.
-- **Haiku 4.5** - mechanical grunt only: file finding, log/grep sweeps, lint and style checks, simple lookups. Don't burn a bigger model on these.
-- **Fable 5** - reserved top rung. Only for genuinely long-horizon autonomous runs (multi-hour agent loops, large migrations, deep multi-phase workflows) where staying focused across millions of tokens is the whole point. It costs 2x Opus - it's not the everyday default. When I reach for it, I'll say why first.
+- **Opus** - default for the main thread and any substantive delegated work: design, hard debugging, code review, architecture, anything accuracy-critical.
+- **Sonnet** - routine-but-real subagents: straightforward edits, standard analysis, and research that explains how existing code or behavior works (tracing a flow, mapping a subsystem). Pure mechanical search is Haiku; research that feeds a hard design or correctness decision is Opus.
+- **Haiku** - mechanical grunt only: file finding, log/grep sweeps, lint and style checks, simple lookups. Don't burn a bigger model on these.
+- **Fable** - reserved top rung. Only for genuinely long-horizon autonomous runs - overnight loops, continuous triage, large migrations, deep multi-phase workflows - where staying focused across millions of tokens is the whole point. A request to stand up or run such an autonomous process is itself the long-horizon case: delegate the run on Fable (subagent or workflow) rather than handling it as a design conversation. It costs 2x Opus - it's not the everyday default. When I reach for it, I'll say why first.
+
+Tiers, not pinned versions - route by tier name and let the harness resolve the current model in each tier.
 
 When unsure between two tiers, take the higher one - but never route mechanical work above Haiku just to be safe.
+
+Subagents inherit the session model unless overridden. When the session runs on Fable, always pass an explicit model when delegating - never let mechanical or routine work inherit the top rung.
 
 ## Environment (WSL)
 
