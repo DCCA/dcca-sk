@@ -29,6 +29,32 @@ win_home() {
 
 [[ -f "$MANIFEST" ]] || { echo "manifest ausente: $MANIFEST" >&2; exit 1; }
 
+# Portabilidade: normaliza a copia ANTES de comparar, senao a deteccao mente -
+# comparar o arquivo vivo cru com o repo ja normalizado acusava "atualizado"
+# em toda rodada mesmo sem mudanca real. Hoje so o settings.json do claude
+# precisa (reescreve home absoluto -> $HOME nos comandos).
+normalize() {
+  local tool="$1" rel="$2" f="$3"
+  [[ "$tool" == "claude" && "$rel" == "settings.json" ]] || return 0
+  command -v python3 >/dev/null 2>&1 || return 0
+  python3 - "$f" "$HOME" <<'PY'
+import json, sys
+path, home = sys.argv[1], sys.argv[2]
+d = json.load(open(path, encoding="utf-8"))
+def fix(s): return s.replace(home + "/.claude", "$HOME/.claude")
+sl = d.get("statusLine", {})
+if isinstance(sl, dict) and "command" in sl:
+    sl["command"] = fix(sl["command"])
+for grp in d.get("hooks", {}).values():
+    for entry in grp:
+        for h in entry.get("hooks", []):
+            if "command" in h:
+                h["command"] = fix(h["command"])
+json.dump(d, open(path, "w", encoding="utf-8"), indent=2)
+open(path, "a", encoding="utf-8").write("\n")
+PY
+}
+
 changed=0
 missing=0
 while IFS='|' read -r m_tool m_lin m_mac m_wsl m_excl m_mode; do
@@ -57,35 +83,16 @@ while IFS='|' read -r m_tool m_lin m_mac m_wsl m_excl m_mode; do
       echo "AVISO: '$m_tool/$rel' nao existe em $target - pulando." >&2
       missing=$((missing + 1)); continue
     fi
-    cmp -s "$live" "$repo_file" && continue   # ja identico
-    cp "$live" "$repo_file"
+    tmp="$(mktemp)"
+    cp "$live" "$tmp"
+    normalize "$m_tool" "$rel" "$tmp"
+    if cmp -s "$tmp" "$repo_file"; then rm -f "$tmp"; continue; fi   # ja identico pos-normalizacao
+    cp "$tmp" "$repo_file"   # cp sobre o arquivo existente preserva o modo (ex: hook executavel)
+    rm -f "$tmp"
     echo "atualizado no repo: $m_tool/$rel"
     changed=$((changed + 1))
   done < <(find "$src" -type f -print0 | sort -z)
 done < "$MANIFEST"
-
-# Portabilidade (claude-especifico): reescreve o home absoluto -> $HOME nos
-# comandos do settings.json, pra uma captura nunca reintroduzir path da maquina
-# (ex: /home/USER). So o settings.json do claude tem esse problema.
-settings="$REPO_DIR/dotfiles/claude/settings.json"
-if [[ -f "$settings" ]] && command -v python3 >/dev/null 2>&1; then
-  python3 - "$settings" "$HOME" <<'PY'
-import json, sys
-path, home = sys.argv[1], sys.argv[2]
-d = json.load(open(path, encoding="utf-8"))
-def fix(s): return s.replace(home + "/.claude", "$HOME/.claude")
-sl = d.get("statusLine", {})
-if isinstance(sl, dict) and "command" in sl:
-    sl["command"] = fix(sl["command"])
-for grp in d.get("hooks", {}).values():
-    for entry in grp:
-        for h in entry.get("hooks", []):
-            if "command" in h:
-                h["command"] = fix(h["command"])
-json.dump(d, open(path, "w", encoding="utf-8"), indent=2)
-open(path, "a", encoding="utf-8").write("\n")
-PY
-fi
 
 echo
 tail=""
