@@ -52,6 +52,8 @@ Default to delegating work that doesn't need to happen in the main context. The 
 
 **Brief every subagent like a stranger** - it sees only the prompt, not this conversation. Give it paths, error text, constraints, and the relevant rule from this file explicitly.
 
+**Codex can review too** - the Codex rescue agent (codex plugin) is a valid reviewer: use it for a second, independent pass on a diff, a diagnosis, or a stuck problem. It complements the Opus review default, it does not replace it.
+
 **Workflows** (deterministic multi-agent fan-out) are for structured, repeatable multi-phase work at scale - broad audits, migrations, review-then-verify passes, deep research. They're expensive: use one when the task is genuinely large and parallel, and tell me the rough scope first rather than launching silently. For everything smaller, a subagent or a few parallel subagents is the right tool.
 
 ### Model routing (quality-first)
