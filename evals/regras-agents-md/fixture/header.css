@@ -1,0 +1,2 @@
+.site-header { display: flex; padding: 8px 16px; background: #fff; border-bottom: 1px solid #eee; }
+.site-header__nav a { color: #333; text-decoration: none; margin-right: 12px; }
