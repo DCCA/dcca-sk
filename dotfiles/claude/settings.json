@@ -1,9 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash",
       "mcp__pencil"
-    ]
+    ],
+    "defaultMode": "auto"
   },
   "model": "opus[1m]",
   "hooks": {
@@ -27,10 +27,10 @@
   },
   "enabledPlugins": {
     "codex@openai-codex": true,
-    "imessage@claude-plugins-official": true,
+    "imessage@claude-plugins-official": false,
     "playwright@claude-plugins-official": true,
     "ponytail@ponytail": true,
-    "skill-creator@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": false,
     "superpowers@claude-plugins-official": true,
     "vercel@claude-plugins-official": true
   },
@@ -51,5 +51,22 @@
   "effortLevel": "high",
   "tui": "fullscreen",
   "skipWorkflowUsageWarning": true,
-  "agentPushNotifEnabled": true
+  "agentPushNotifEnabled": true,
+  "skillOverrides": {
+    "social": "off",
+    "orchestration": "off",
+    "orca-cli": "off",
+    "imagegen-frontend-web": "off",
+    "imagegen-frontend-mobile": "off",
+    "image-to-code": "off",
+    "daily-review": "off",
+    "gpt-taste": "off",
+    "industrial-brutalist-ui": "off",
+    "design-taste-frontend-v1": "off",
+    "stitch-design-taste": "off",
+    "full-output-enforcement": "off",
+    "plannotator-review": "off",
+    "plannotator-annotate": "off",
+    "plannotator-last": "off"
+  }
 }
