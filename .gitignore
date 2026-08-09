@@ -22,3 +22,12 @@ skills-lock.json
 
 # Log solto de ferramenta (excalidraw etc).
 *.log
+# ...menos as fixtures de eval: o build.log FAZ PARTE do cenario (e a evidencia
+# que a regra "evidence before claims" tem que ler em vez da nota velha).
+!evals/*/fixture/*.log
+
+# Saida transitoria das evals automatizadas (transcripts, veredito, log da rodada).
+# O placar duravel vai pro evals/RESULTS.md, igual as evals de skill.
+evals/*/runs/
+evals/*/results.json
+__pycache__/
