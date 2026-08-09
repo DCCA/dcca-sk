@@ -13,12 +13,21 @@ Tests pass, it builds, UI visually verified in light and dark, shipped via PR. `
 
 Never commit to the default branch. Skip the PR only when I call the work a spike or ask for just the diff.
 
+## Evidence before claims
+
+- Root cause comes from this run's logs or output, never from memory, a prior session, or a memory note. Quote the evidence line.
+- "Fixed" requires re-running the failing check and pasting the output. No fresh run, no claim.
+- Before spending credits or API budget (image, video, LLM generation): preflight the real per-unit cost and report the projected total. Never assume a price.
+
 ## Working rules
 
 - Reproduce a bug end-to-end before fixing it, then fix it where the callers converge, not on the one path the report named.
+- UI, redesign, or architecture work: show me 2-3 rendered options and wait for my pick before writing a spec or production code. Never self-direct a design and build it.
+- "Audit", "review", "check" means audit AND fix, shipped in the same pass. Report-only when I say report-only.
 - Matching a design: replicate structure and layout, not just colors. Read the design source first, plan, then build. Rebuild native controls (e.g. `<select>`) as custom components when CSS cannot match them.
 - Reply in the language I wrote in. Repo artifacts stay in the repo's language.
 - Prefer `python3`. Never run `sudo` - surface it for me to run via `!`.
+- WSL2 host: no `jq`, no branded Chrome, no Nerd Font glyphs. `command -v` before reaching for a tool, `python3 -c` for JSON parsing.
 
 ## Writing and commits
 
