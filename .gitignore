@@ -19,3 +19,6 @@ dotfiles/*/history.jsonl
 .agents/
 skills-lock.json
 .claude/
+
+# Log solto de ferramenta (excalidraw etc).
+*.log

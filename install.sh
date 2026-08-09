@@ -65,6 +65,18 @@ declare -A seen
 linked=0
 skipped=0
 invalid=0
+pruned=0
+
+# Poda symlinks quebrados antes de linkar: skill deletada do repo (ou de outro
+# repo que sumiu) deixava um link morto para sempre em $TARGET. Loop em vez de
+# 'find -xtype l' porque o find do BSD/macOS nao tem -xtype.
+for link in "$TARGET"/*; do
+  if [[ -L "$link" && ! -e "$link" ]]; then
+    echo "podado:     $(basename "$link") -> $(readlink "$link") (alvo sumiu)"
+    rm -- "$link"
+    pruned=$((pruned + 1))
+  fi
+done
 
 while IFS= read -r -d '' skillmd; do
   dir="$(dirname "$skillmd")"
@@ -103,7 +115,7 @@ while IFS= read -r -d '' skillmd; do
 done < <(find "$SKILLS_SRC" -name SKILL.md -print0 | sort -z)
 
 echo
-echo "Concluido: $linked linkada(s), $skipped pulada(s), $invalid invalida(s). Destino: $TARGET"
+echo "Concluido: $linked linkada(s), $pruned podada(s), $skipped pulada(s), $invalid invalida(s). Destino: $TARGET"
 
 # --- Config portatil (dotfiles/ dirigido por manifest) ---------------------
 # Para cada tool no dotfiles/manifest: COPIA dotfiles/<tool>/ -> target do tool
