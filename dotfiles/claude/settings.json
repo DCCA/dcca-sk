@@ -1,6 +1,30 @@
 {
-  "agentPushNotifEnabled": true,
-  "effortLevel": "xhigh",
+  "permissions": {
+    "allow": [
+      "Bash",
+      "mcp__pencil"
+    ]
+  },
+  "model": "opus[1m]",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$HOME/.claude/hooks/herdr-agent-state.sh\" session",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "CLAUDE_STATUSLINE_NERDFONT=1 CLAUDE_STATUSLINE_POWERLINE=0 bash \"$HOME/.claude/statusline.sh\"",
+    "refreshInterval": 60
+  },
   "enabledPlugins": {
     "codex@openai-codex": true,
     "imessage@claude-plugins-official": true,
@@ -13,43 +37,19 @@
   "extraKnownMarketplaces": {
     "openai-codex": {
       "source": {
-        "repo": "openai/codex-plugin-cc",
-        "source": "github"
+        "source": "github",
+        "repo": "openai/codex-plugin-cc"
       }
     },
     "ponytail": {
       "source": {
-        "repo": "DietrichGebert/ponytail",
-        "source": "github"
+        "source": "github",
+        "repo": "DietrichGebert/ponytail"
       }
     }
   },
-  "hooks": {
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "command": "bash \"$HOME/.claude/hooks/herdr-agent-state.sh\" session",
-            "timeout": 10,
-            "type": "command"
-          }
-        ],
-        "matcher": "*"
-      }
-    ]
-  },
-  "model": "claude-fable-5[1m]",
-  "permissions": {
-    "allow": [
-      "Bash",
-      "mcp__pencil"
-    ]
-  },
+  "effortLevel": "high",
+  "tui": "fullscreen",
   "skipWorkflowUsageWarning": true,
-  "statusLine": {
-    "command": "CLAUDE_STATUSLINE_NERDFONT=1 CLAUDE_STATUSLINE_POWERLINE=0 bash \"$HOME/.claude/statusline.sh\"",
-    "refreshInterval": 60,
-    "type": "command"
-  },
-  "tui": "fullscreen"
+  "agentPushNotifEnabled": true
 }
