@@ -37,7 +37,9 @@ Never commit to the default branch. Skip the PR only when I call the work a spik
 
 ## Delegation
 
-- Research agents are read-only. Never run two agents that edit the same file.
+- Research agents are read-only. Any agent that edits files runs in its own git worktree (`isolation: worktree`) - never in the main checkout.
+- While an editing agent is running, the main checkout is read-only: no commits, no branch switches, no checkouts. Never run two agents that edit the same project.
+- Merge only after every fix commit is pushed - check `git status` and `git log origin/<branch>..<branch>` before `gh pr merge`.
 - Codex rescue (codex plugin) is a valid second reviewer on a diff or a stuck problem. It complements the Opus review default, it does not replace it.
 - Workflows are for large multi-phase work only. Tell me the rough scope before launching, never silently.
 
