@@ -10,10 +10,11 @@ Placar = invariantes + armadilhas da rubrica. "PASS" = todos verdes, zero alucin
 |-------|------|--------|-----------|
 | `daily-review` | 2026-06-29 | 11/11 invariantes + 3/3 armadilhas | PASS |
 | `capturar-config-claude` (retired) | 2026-07-03 | 8/8 invariantes (rubrica comportamental) | PASS |
-| regras do `AGENTS.md` externo ([eval](regras-agents-md/README.md)) | 2026-08-09 | 39/40 trials (40/40 reais; 1 falso negativo do juiz) | PASS |
+| regras do `AGENTS.md` externo ([eval](regras-agents-md/README.md)) | 2026-08-18 | 8/8 trials na policy migrada | PASS |
 
 ## Notas
 
+- 2026-08-18: a policy canonica migrada no dcca-env passou 8/8 casos em uma rodada completa de 1 trial, incluindo fire/nofire de evidencia, opcoes antes de design, audit-and-fix e ambiente WSL. Custo equivalente: US$ 5,58; custo direto US$ 0 via assinatura Max.
 - `capturar-config-claude` foi aposentada quando o dcca-env assumiu a configuracao de agentes; o resultado historico permanece. A eval de policy agora recebe o arquivo canonico externo por `--agents-file`.
 - 2026-06-29: `daily-review` teve a config extraída para `config.example.md` + `config.md` (piloto do modelo "config por skill") e foi re-validada **14/14**, sem regressão.
 - 2026-06-29: `daily-review` foi enxugada (1882 -> 1210 palavras) para eficiência de token e re-validada - mesmo placar, zero regressão.

@@ -19,9 +19,9 @@ from pathlib import Path
 HERE = Path(__file__).parent
 FIXTURE = HERE / "fixture"
 RUNS = HERE / "runs"
-# ponytail: measured at $0.48/run on the R2-fire probe (the heaviest case); good enough
-# for a projection, replaced by the real total once a run finishes.
-COST_PER_RUN = 0.48
+# One complete 8-case migration round cost $5.58 equivalent on 2026-08-18,
+# including subject and judge calls: about $0.70 per trial.
+COST_PER_RUN = 0.70
 JUDGE_MODEL = "sonnet"
 POLICY: Path | None = None
 
@@ -155,7 +155,7 @@ def main():
     total = len(cases) * args.trials
 
     print(f"{len(cases)} cases x {args.trials} trials = {total} subject runs + {total} judge calls")
-    print(f"projected: ~${total * COST_PER_RUN:.2f} (subject runs; judge calls add a few percent)\n")
+    print(f"projected: ~${total * COST_PER_RUN:.2f} (subject + judge calls)\n")
     if args.dry_run:
         for c in cases:
             print(f"  {c['id']:<12} {c['expect']:<7} {c['prompt']}")
