@@ -4,7 +4,28 @@ Logbook do repositório. Entradas em ordem reversa (mais recente no topo). Cada 
 
 ---
 
-## 2026-07-19 - Fecha o config layer (shell glue) + nits + plugin openai codex
+## 2026-08-17 - dcca-sk vira fonte de autoria e export
+
+**Where we were:** O repo tambem mantinha snapshots de Claude/Codex, captura de
+config e um registry flutuante de terceiros, duplicando o novo dcca-env.
+
+**What we did:**
+- Removidos snapshots de agente, `capturar-config-claude`, suas evals e a eval
+  ligada ao `AGENTS.md` local.
+- Removidos registry e provisioning de terceiros. O dcca-env agora e o unico
+  dono do runtime de agentes, links e instalacao de terceiros.
+- Criado `skills/export-manifest.json`, com `daily-review` como unica skill
+  autoral aprovada, e `scripts/check-export.py` para validar manifesto,
+  frontmatter e cobertura.
+- `install.sh` continua validando skills e cuidando apenas de shell, VS Code e
+  hook Git. `capture.sh` agora captura apenas shell/VS Code e informa o limite.
+
+**Decision:** Um writer por destino. O dcca-sk publica skills autorais; o
+dcca-env restaura runtime e terceiros; o ade-stack continua dono do terminal.
+
+---
+
+## Histórico - 2026-07-19 - Fecha o config layer (ownership superseded)
 
 **Where we were:** O plano "setup de IA como dotfiles" estava quase completo (07-18): faltava a última peça (shell glue), uns nits, e nem tudo estava ativado nesta máquina.
 

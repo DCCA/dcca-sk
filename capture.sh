@@ -1,15 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Captura: copia a config viva de cada tool DE VOLTA para dotfiles/<tool>/,
-# dirigido por dotfiles/manifest. E o inverso do passo de config do install.sh.
+# Captura somente os arquivos ainda pertencentes ao dcca-sk (shell e VS Code)
+# de volta para dotfiles/<tool>/, dirigido por dotfiles/manifest.
 #
-# So atualiza os arquivos JA rastreados em dotfiles/<tool>/ - nao adiciona novos
-# sozinho (pra isso, copie o arquivo pra dotfiles/<tool>/ na mao e rode install.sh).
-# Pula os excludes do manifest (segredo/estado local). Nao commita nada: revise
-# com `git diff` e commite voce.
-#
-# Origem custom do claude: CLAUDE_HOME=/outro/caminho ./capture.sh
+# Configuracao de agentes, skills de terceiros e estado de runtime pertencem ao
+# dcca-env e sao deliberadamente ignorados. Nao commita nada: revise com
+# `git diff` e commite voce.
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 MANIFEST="$REPO_DIR/dotfiles/manifest"
@@ -28,32 +25,8 @@ win_home() {
 }
 
 [[ -f "$MANIFEST" ]] || { echo "manifest ausente: $MANIFEST" >&2; exit 1; }
-
-# Portabilidade: normaliza a copia ANTES de comparar, senao a deteccao mente -
-# comparar o arquivo vivo cru com o repo ja normalizado acusava "atualizado"
-# em toda rodada mesmo sem mudanca real. Hoje so o settings.json do claude
-# precisa (reescreve home absoluto -> $HOME nos comandos).
-normalize() {
-  local tool="$1" rel="$2" f="$3"
-  [[ "$tool" == "claude" && "$rel" == "settings.json" ]] || return 0
-  command -v python3 >/dev/null 2>&1 || return 0
-  python3 - "$f" "$HOME" <<'PY'
-import json, sys
-path, home = sys.argv[1], sys.argv[2]
-d = json.load(open(path, encoding="utf-8"))
-def fix(s): return s.replace(home + "/.claude", "$HOME/.claude")
-sl = d.get("statusLine", {})
-if isinstance(sl, dict) and "command" in sl:
-    sl["command"] = fix(sl["command"])
-for grp in d.get("hooks", {}).values():
-    for entry in grp:
-        for h in entry.get("hooks", []):
-            if "command" in h:
-                h["command"] = fix(h["command"])
-json.dump(d, open(path, "w", encoding="utf-8"), indent=2)
-open(path, "a", encoding="utf-8").write("\n")
-PY
-}
+echo "dcca-env ownership: agent config, third-party skills and runtime state are not captured by dcca-sk."
+echo "Capture scope: shell e VS Code only; agent destinations serao pulados."
 
 changed=0
 missing=0
@@ -65,7 +38,6 @@ while IFS='|' read -r m_tool m_lin m_mac m_wsl m_excl m_mode; do
   elif [[ "$IS_WSL" == 1 ]]; then target="$(trim "$m_wsl")"
   else target="$(trim "$m_lin")"; fi
   [[ "$target" == "-" || -z "$target" ]] && continue
-  if [[ "$m_tool" == "claude" && -n "${CLAUDE_HOME:-}" ]]; then target="$CLAUDE_HOME"; fi
   target="${target/#\~/$HOME}"
   if [[ "$target" == *'$WINHOME'* ]]; then
     wh="$(win_home)"; [[ -z "$wh" ]] && continue
@@ -79,14 +51,17 @@ while IFS='|' read -r m_tool m_lin m_mac m_wsl m_excl m_mode; do
     rel="${repo_file#"$src"/}"; top="${rel%%/*}"
     case "$excl" in *",$rel,"*|*",${rel##*/},"*|*",$top,"*) continue;; esac
     live="$target/$rel"
+    if [[ -L "$live" ]]; then
+      echo "ERRO: recusando symlink em '$live'; capture aceita somente arquivo regular." >&2
+      exit 1
+    fi
     if [[ ! -f "$live" ]]; then
       echo "AVISO: '$m_tool/$rel' nao existe em $target - pulando." >&2
       missing=$((missing + 1)); continue
     fi
     tmp="$(mktemp)"
     cp "$live" "$tmp"
-    normalize "$m_tool" "$rel" "$tmp"
-    if cmp -s "$tmp" "$repo_file"; then rm -f "$tmp"; continue; fi   # ja identico pos-normalizacao
+    if cmp -s "$tmp" "$repo_file"; then rm -f "$tmp"; continue; fi
     cp "$tmp" "$repo_file"   # cp sobre o arquivo existente preserva o modo (ex: hook executavel)
     rm -f "$tmp"
     echo "atualizado no repo: $m_tool/$rel"

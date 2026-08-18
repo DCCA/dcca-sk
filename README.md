@@ -1,74 +1,91 @@
 # dcca-sk
 
-Minhas agent skills (Claude Code) + o setup portatil do meu Claude Code - criar, melhorar e organizar tudo que uso no trabalho, para levar entre maquinas e empregos.
+Fonte publica de autoria das minhas agent skills, templates e evals. O repo e
+agnostico a empresa: configuracoes reais ficam no destino, como placeholders
+ou arquivos locais ignorados.
 
-O repo e **agnostico a empresa**: as skills ficam genericas, com a configuracao especifica como placeholder. A config real e preenchida so no destino, na hora de importar. Assim as skills sao portateis entre empregos.
+## Ownership
+
+- **dcca-sk**: escreve e avalia skills autorais. O contrato de exportacao esta
+  em [`skills/export-manifest.json`](skills/export-manifest.json); hoje exporta
+  apenas `daily-review`.
+- **dcca-env**: instala skills de terceiros, plugins, CLIs, configuracao de
+  agentes e links de runtime. dcca-sk nao e um segundo escritor desses
+  destinos.
+- **ade-stack**: continua dono do ambiente de terminal.
+- **dcca-sk**: continua dono do glue de shell e dos arquivos seed do VS Code
+  descritos em [`dotfiles/manifest`](dotfiles/manifest).
+
+Credenciais, autenticacao, sessoes, historico, caches, estado gerado e backups
+nao pertencem a este repositorio.
 
 ## Estrutura
 
 ```
-skills/         minhas skills (dev/, produto/, escrita/)
-templates/
-  SKILL.md      base para uma skill nova
-dotfiles/       config portatil por tool (dirigido por dotfiles/manifest)
-  manifest              tool | target por-OS (linux/mac/wsl) | excludes
-  claude/               config do ~/.claude: AGENTS.md, settings.json, statusline, hooks/
-install.sh      symlinka as skills e COPIA a config em ~/.claude (repo -> maquina); arma o hook de git
-capture.sh      copia a config do ~/.claude de volta pra dotfiles/claude/ (maquina -> repo)
-scripts/        security-scan.sh (segredo/PII); roda no githooks/pre-push antes de todo push
-CLAUDE.md       convencoes (lido pelo Claude ao trabalhar neste repo)
+skills/                  skills autorais e export-manifest.json
+templates/SKILL.md       base para uma skill nova
+evals/                   cenarios, rubricas e resultados
+dotfiles/manifest        somente shell e VS Code ainda pertencentes a este repo
+dotfiles/shell/          glue de shell para ferramentas de IA
+dotfiles/vscode/         settings e extensoes seed do VS Code
+install.sh               valida o export e instala shell/VS Code; arma o hook
+capture.sh               captura somente os destinos ainda pertencentes aqui
+scripts/security-scan.sh varredura obrigatoria antes de push
 ```
 
-Cada skill vive em `skills/<categoria>/<nome>/SKILL.md`.
-
-## Instalar
+## Instalar o que este repo possui
 
 ```bash
 ./install.sh
 ```
 
-Faz duas coisas:
+O script valida cada `SKILL.md` listado no export manifest, sem criar links em
+`~/.claude/skills` ou em qualquer outro destino de agente. Tambem copia os
+arquivos de shell e VS Code conforme `dotfiles/manifest`, instala extensoes do
+VS Code quando `code` esta disponivel e arma o hook local de seguranca do Git.
+Ele imprime explicitamente que configuracao de agentes e terceiros pertence ao
+dcca-env.
 
-1. **Skills** (symlink) - cada `SKILL.md` vira `~/.claude/skills/<nome>`. Como e symlink, editar a skill no repo reflete direto no Claude.
-2. **Config** (copia) - cada arquivo de `dotfiles/claude/` e **copiado** para `~/.claude/<arquivo>` como arquivo real. `~/.claude` fica independente do repo. Um arquivo real ja existente e diferente e salvo em `~/.claude/backups/config-<timestamp>/` antes de ser sobrescrito; se ja for identico, nada acontece. Idempotente.
+Para restaurar o ambiente de agentes, use o fluxo `bootstrap`, `preview`,
+`apply` e `check` do dcca-env. Esses comandos sao a unica fonte de runtime para
+Pi, Claude Code e Codex.
 
-O repo e a **copia-mestra** da config: edite em `dotfiles/claude/`, rode `./install.sh` para instalar na maquina, e commite.
-
-### Capturar mudancas feitas na maquina
-
-Ajustou algo direto em `~/.claude` (settings, statusline, hook)? Traga de volta pro repo:
+## Capturar mudancas ainda pertencentes a este repo
 
 ```bash
 ./capture.sh
 ```
 
-Copia cada arquivo rastreado do `~/.claude` para `dotfiles/claude/` (so os que ja existem la), reescreve paths absolutos do home para `$HOME` no `settings.json` (nao vaza `/home/USER`), e nao commita nada - revise com `git diff` e commite voce. Origem custom: `CLAUDE_HOME=/x ./capture.sh`.
+A captura traz somente shell e VS Code de volta para `dotfiles/`, nunca captura
+configuracao de agentes, skills de terceiros ou estado de runtime. Revise o
+diff antes de commitar. O script nao cria commit.
 
-Numa maquina nova: clone o repo, rode `./install.sh`, e o Claude Code ja sobe com suas instrucoes, settings, statusline e hooks. Os **plugins** (superpowers, ponytail, vercel, ...) sao restaurados sozinhos pelo `settings.json` (`enabledPlugins` + `extraKnownMarketplaces`). Para o ambiente de **terminal** (WezTerm + herdr + yazi + helix + eza + starship, Catppuccin, cross-platform WSL/Linux/macOS), clone tambem o repo `DCCA/ade-stack` (privado) e rode `bash setup-ade-stack.sh`. Runbook completo dos dois passos em [`CLAUDE.md`](CLAUDE.md) ("Setup em maquina nova").
-
-Destinos customizaveis: `CLAUDE_SKILLS_DIR=/x CLAUDE_HOME=/y ./install.sh`.
-
-### O que NAO vai para o repo
-
-Segredos e estado local ficam so na maquina, nunca versionados: `.credentials.json`, `settings.local.json`, `history.jsonl`, `sessions/`, `projects/` (transcricoes + memoria), caches. Se precisar de override por maquina, use `~/.claude/settings.local.json` (o Claude Code mescla por cima do `settings.json`).
-
-## Criar uma skill
-
-1. Peca ao Claude para usar o skill `writing-skills` (ou copie `templates/SKILL.md`).
-2. Salve em `skills/<categoria>/<nome-kebab>/SKILL.md`.
-3. Rode `./install.sh`.
-
-Convencoes completas em [`CLAUDE.md`](CLAUDE.md).
-
-## Skills
+## Skills autorais
 
 | Skill | Categoria | O que faz |
 |-------|-----------|-----------|
-| `daily-review` | produto | Fecha o dia anterior e prepara o dia atual a partir das fontes conectadas (calendario, e-mail, Slack, GitHub, Jira, transcricoes). |
-| `capturar-config-claude` | dev | Traz mudancas feitas no `~/.claude` de volta pro repo: roda `capture.sh`, revisa o diff (sem vazar segredo/path) e sobe via PR. |
+| `daily-review` | produto | Fecha o dia anterior e prepara o dia atual a partir das fontes conectadas. |
 
-Skills removidas (construidas mas nao usadas) e ideias paradas: [`SKILLS-MAP.md`](SKILLS-MAP.md).
+Para criar uma skill, comece em [`templates/SKILL.md`](templates/SKILL.md),
+salve-a em `skills/<categoria>/<nome-kebab>/SKILL.md`, adicione-a ao export
+manifest e rode `./install.sh` para validar frontmatter e o contrato.
 
-### Skills externas que eu uso (referenciadas)
+## Setup em maquina nova
 
-Skills/ferramentas de terceiros que instalo em toda maquina ficam em [`skills/registry`](skills/registry) - **so ponteiros**, nunca o conteudo. O `install.sh` provisiona cada uma: `plugin` (verifica `enabledPlugins`), `git` (clona em `~/.claude/skills`), `npx` (`npx skills add`), `npm` (`npm install -g`). Para adicionar uma, e uma linha no arquivo. Design em [`docs/specs/2026-07-18-skills-registry.md`](docs/specs/2026-07-18-skills-registry.md).
+1. Clone dcca-env e rode o fluxo de restore documentado nele.
+2. Clone este repo somente para editar skills, templates, evals e o glue de
+   shell/VS Code que ainda e seu.
+3. Para o ambiente de terminal, clone tambem `DCCA/ade-stack` e rode seu
+   `setup-ade-stack.sh`.
+
+## Seguranca
+
+Este repositorio e publico. O `install.sh` arma `githooks/pre-push`, que roda
+`scripts/security-scan.sh`. Rode o scan manualmente quando necessario:
+
+```bash
+./scripts/security-scan.sh
+```
+
+Nunca adicione credenciais, tokens, PII, estado de runtime ou paths absolutos
+da maquina.

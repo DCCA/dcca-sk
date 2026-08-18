@@ -1,16 +1,17 @@
 #!/usr/bin/env -S python3 -u
-"""Measure whether the ~/.claude/AGENTS.md rules actually change agent behaviour.
+"""Measure whether an external AGENTS.md changes agent behaviour.
 
-Each case runs headless in a throwaway copy of ./fixture, then a judge model grades
+The canonical policy is owned by dcca-env and passed with --agents-file. Each
+case runs headless in a throwaway copy of ./fixture, then a judge model grades
 the transcript against the case criterion. Two signals per trial:
   - deterministic: did the watched fixture file change when it should (or shouldn't)?
   - judged: does the response comply with the rule?
 A trial passes only if both agree.
 
 Usage:
-  ./run.py --trials 5                 # full run
-  ./run.py --trials 1 --only R2       # cheap smoke
-  ./run.py --dry-run                  # print the plan and projected cost, spend nothing
+  ./run.py --agents-file PATH --trials 5
+  ./run.py --agents-file PATH --trials 1 --only R2
+  ./run.py --agents-file PATH --dry-run
 """
 import argparse, concurrent.futures as cf, difflib, hashlib, json, os, shutil, stat, subprocess, sys
 from pathlib import Path
@@ -22,6 +23,7 @@ RUNS = HERE / "runs"
 # for a projection, replaced by the real total once a run finishes.
 COST_PER_RUN = 0.48
 JUDGE_MODEL = "sonnet"
+POLICY: Path | None = None
 
 sys.path.insert(0, str(HERE))
 from cases import CASES  # noqa: E402
@@ -45,6 +47,8 @@ def run_subject(case, trial):
     work = RUNS / f"{case['id']}-t{trial}"
     shutil.rmtree(work, ignore_errors=True)
     shutil.copytree(FIXTURE, work)
+    assert POLICY is not None
+    shutil.copy2(POLICY, work / "CLAUDE.md")
     for p in work.iterdir():  # copytree carries the read-only bits; the copy must be editable
         if p.is_file():
             p.chmod(p.stat().st_mode | stat.S_IWUSR)
@@ -134,12 +138,18 @@ def trial(case, i):
 
 
 def main():
+    global POLICY
     ap = argparse.ArgumentParser()
+    ap.add_argument("--agents-file", type=Path, required=True,
+                    help="canonical dcca-env AGENTS.md to evaluate")
     ap.add_argument("--trials", type=int, default=5)
     ap.add_argument("--only", default="", help="substring filter on case id")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--jobs", type=int, default=4)
     args = ap.parse_args()
+    POLICY = args.agents_file.expanduser().resolve()
+    if not POLICY.is_file():
+        ap.error(f"AGENTS.md not found: {POLICY}")
 
     cases = [c for c in CASES if args.only in c["id"]]
     total = len(cases) * args.trials
