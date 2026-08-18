@@ -13,9 +13,8 @@ dotfiles/*/auth.json
 dotfiles/*/settings.local.json
 dotfiles/*/history.jsonl
 
-# Artefatos do skills CLI (npx skills add) e estado local do Claude no repo.
-# As skills externas do skills/registry sao instaladas GLOBALMENTE (~/.agents),
-# nunca aqui - o install.sh roda o npx a partir do $HOME.
+# Artefatos locais de ferramentas de agentes se algum comando for executado
+# neste checkout. Runtime e instalacao sao responsabilidade do dcca-env.
 .agents/
 skills-lock.json
 .claude/

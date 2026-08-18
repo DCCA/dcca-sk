@@ -1,8 +1,10 @@
 # Eval das regras do `AGENTS.md`
 
 As evals de skill (ver [`../README.md`](../README.md)) checam se uma **skill** faz o que promete.
-Esta aqui checa outra coisa: se as **regras de comportamento** do
-[`dotfiles/claude/AGENTS.md`](../../dotfiles/claude/AGENTS.md) realmente mudam o que o agente faz.
+Esta aqui checa outra coisa: se as **regras de comportamento** do `AGENTS.md`
+canonico, hoje mantido no `dcca-env`, realmente mudam o que o agente faz. O
+runner recebe esse arquivo por `--agents-file`; o dcca-sk continua dono do
+harness e dos casos, sem manter uma copia da policy.
 
 Regra em prosa falha calada. Ou o modelo ignora, ou - o caso mais chato - a regra dispara
 onde nao devia e vira imposto em toda tarefa trivial. Os dois casos sao invisiveis sem medir.
@@ -28,9 +30,10 @@ crivos. Um trial so passa se os dois concordarem:
 ## Rodar
 
 ```bash
-./run.py --dry-run              # mostra o plano e o custo projetado, nao gasta nada
-./run.py --trials 1 --only R2   # smoke barato de um caso
-./run.py --trials 5 --jobs 5    # rodada completa
+POLICY=~/projects/dcca-env/home/dot_config/dcca-env/AGENTS.md
+./run.py --agents-file "$POLICY" --dry-run
+./run.py --agents-file "$POLICY" --trials 1 --only R2
+./run.py --agents-file "$POLICY" --trials 5 --jobs 5
 ```
 
 **Custa dinheiro de verdade:** ~US$ 0,45 por trial (subject + juiz). A rodada completa
@@ -56,7 +59,7 @@ pro [`../RESULTS.md`](../RESULTS.md), mesma convencao das evals de skill.
 
 ## Adicionar uma regra
 
-1. Escreva a regra no `dotfiles/claude/AGENTS.md` e suba via PR.
+1. Escreva a regra no `AGENTS.md` canonico do dcca-env e suba via PR la.
 2. Adicione **os dois** casos no `cases.py` (`*-fire` e `*-nofire`). Sem o `nofire` voce nao
    mede o modo de falha mais provavel.
 3. Se a regra deve produzir (ou impedir) uma edicao, aponte `watch` pro arquivo e defina

@@ -10,9 +10,11 @@ Isso é o loop do `writing-skills` (TDD para skills): rodar -> ver onde falha ->
 - **Cenário** (`skills/<cat>/<skill>/evals/cenario-*.md`): uma situação concreta - entradas que simulam o que os conectores retornariam, puxando da Acme.
 - **Rubrica** (`.../evals/rubrica.md`): os invariantes que a saída TEM que satisfazer (cada um PASS/FAIL), mais as armadilhas conhecidas.
 
-## Eval de regra (não de skill)
+## Eval da policy externa
 
-As regras de comportamento do [`dotfiles/claude/AGENTS.md`](../dotfiles/claude/AGENTS.md) também precisam ser medidas - regra em prosa falha calada, e o modo de falha mais comum é disparar onde não devia. Isso tem um runner automatizado próprio, com par `fire`/`nofire` por regra: [`regras-agents-md/`](regras-agents-md/README.md). Custa dinheiro por rodada; leia o README antes.
+O harness [`regras-agents-md/`](regras-agents-md/README.md) continua neste repo,
+mas recebe por argumento o `AGENTS.md` canonico do dcca-env. Assim os casos e o
+historico permanecem com as evals sem criar uma segunda fonte da policy.
 
 ## Como rodar (nível 1, com subagentes)
 

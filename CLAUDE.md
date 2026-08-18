@@ -1,60 +1,78 @@
 # dcca-sk - Skills profissionais do Daniel
 
-Repositorio das minhas agent skills (Claude Code). Objetivo: **criar, melhorar e organizar** as skills que uso no trabalho. Sou PM; trabalho em portugues.
+Repositorio publico de autoria das minhas agent skills, templates e evals.
+Sou PM e trabalho em portugues.
 
-## Princípio: agnóstico a empresa
+## Principio: agnostico a empresa
 
-Este repo **nao guarda configuracao final**. As skills sao montadas, otimizadas e melhoradas aqui de forma generica; tudo que e especifico de uma empresa (nomes, canais, metricas, produtos, handles) fica como **placeholder de config** dentro da propria skill. A configuracao real e preenchida no destino, quando eu importo a skill para o trabalho. Assim as skills sao portateis: se eu trocar de emprego, levo todas comigo. Nunca commitar dados reais de uma empresa neste repo.
+Este repo nao guarda configuracao final. Skills sao genericas; nomes, canais,
+metricas, produtos, handles e demais dados reais ficam como placeholders ou em
+arquivos locais ignorados. Nunca commitar dados reais de uma empresa.
+
+## Ownership
+
+- `dcca-sk` e a fonte de autoria e avaliacao das skills. O export explicito esta
+  em `skills/export-manifest.json`.
+- `dcca-env` e o unico dono da configuracao de runtime de Pi, Claude Code e
+  Codex, dos links de agente e da instalacao de skills de terceiros.
+- `dcca-sk` nao captura, instala ou linka configuracao de agentes. Nao ha
+  snapshots de agentes nem catalogo de terceiros neste repo.
+- O glue de shell e os arquivos seed do VS Code continuam neste repo. O
+  ambiente de terminal continua no `DCCA/ade-stack`.
 
 ## O que e uma skill aqui
 
-Cada skill e um diretorio `skills/<categoria>/<nome-kebab>/SKILL.md`. O `SKILL.md` tem frontmatter (`name`, `description`) + o corpo com o procedimento. Recursos extras (scripts, referencias) ficam no mesmo diretorio da skill.
+Cada skill e um diretorio `skills/<categoria>/<nome-kebab>/SKILL.md`, com
+frontmatter (`name`, `description`) e procedimento. Recursos extras ficam no
+mesmo diretorio. Categorias:
 
-Categorias:
+- `dev/` - engenharia de software.
+- `produto/` - produto, dados e growth.
+- `escrita/` - escrita e comunicacao.
 
-- `dev/` - engenharia de software (workflows de codigo, revisao, deploy, debugging na minha stack: Next.js, Supabase, Vercel).
-- `produto/` - produto, dados e growth (rotinas de PM, analytics/PostHog, metricas, experimentos).
-- `escrita/` - escrita e comunicacao (documentos, propostas, comunicacao com time e clientes).
+O export manifest lista explicitamente as skills aprovadas para consumo por
+outros repositorios. Hoje a lista contem somente `daily-review`.
 
 ## Criar ou melhorar uma skill
 
-Use **sempre** o skill `superpowers:writing-skills` (versao com verificacao/evals). Nao escreva ou edite `SKILL.md` no improviso.
+Use sempre `superpowers:writing-skills` (versao com verificacao/evals).
+Comece em `templates/SKILL.md`, use nome kebab-case e description em terceira
+pessoa, focada em quando usar e com gatilhos concretos. O frontmatter e sempre
+a primeira coisa do arquivo e a description fica entre aspas simples no YAML.
 
-Convencoes:
+## Evals
 
-- `name` em kebab-case, igual ao nome do diretorio.
-- `description` em terceira pessoa, focada em QUANDO usar, com gatilhos concretos. E o campo que faz o Claude escolher a skill - capriche. Coloque entre **aspas simples** no YAML: ela costuma conter `:` e aspas, que quebram o frontmatter se ficar sem aspas. O frontmatter (`---`) e a primeira coisa do arquivo, sempre.
-- Uma skill = um proposito. Se esta fazendo coisas demais, quebre em duas.
-- Idioma: portugues (como as minhas skills), salvo se a skill for para compartilhar publicamente.
-- **Nunca** preencher config com dados reais de uma empresa - deixe placeholders entre colchetes (ver `daily-review`).
-- Comece a partir de `templates/SKILL.md`.
+Toda skill nasce com pelo menos um cenario e uma rubrica em seu diretorio
+evals. Use `evals/empresa-ficticia/acme.md` e consulte `evals/README.md` para o
+fluxo aplicador -> avaliador. Resultados duraveis ficam em `evals/RESULTS.md`.
+A policy de agentes pertence ao dcca-env; o harness e os casos de eval continuam neste repo e recebem o arquivo canonico por argumento.
 
-## Evals (testar a skill)
+## Instalar e capturar
 
-Toda skill nasce com **≥1 cenário + rubrica** em `skills/<categoria>/<skill>/evals/`, puxando da empresa fictícia `evals/empresa-ficticia/acme.md`. Para entender e rodar (aplicador + avaliador via subagentes), ver `evals/README.md`. Teste com conectores reais (nível 2) em `evals/sandbox-nivel-2.md`. Sem eval, a skill não está pronta - casa com a preferência de usar a versão com evals.
+`./install.sh` valida o frontmatter e a estrutura das skills listadas em
+`skills/export-manifest.json`, sem criar links de runtime. Tambem instala os
+arquivos ainda pertencentes ao repo conforme `dotfiles/manifest`: glue de shell
+e arquivos seed do VS Code. Por fim, arma o hook de seguranca do Git. O script
+imprime uma mensagem clara de que agentes, terceiros e links de runtime sao
+dominio do dcca-env.
 
-## Instalar / atualizar
-
-`./install.sh` faz quatro coisas (idempotente): (1) **symlinka** cada `skills/**/SKILL.md` em `~/.claude/skills/<nome>` - editar a skill no repo reflete direto na proxima sessao, sem reinstalar; (2) **copia** os configs de `dotfiles/<tool>/` para os targets do `dotfiles/manifest` (por-OS; hoje so `claude` -> `~/.claude`), com backup do que sobrescreve; (3) **arma** o git hook (`core.hooksPath -> githooks`); (4) **provisiona as skills externas** listadas em `skills/registry` (ponteiros: `plugin`/`git`/`npx`/`npm`; falha de item avisa e segue). De quebra, **valida o frontmatter YAML** de cada skill propria: skill quebrada nao instala e o script sai != 0 - e o "lint" do repo.
-
-Fez ajuste direto no `~/.claude` (settings, statusline, hook)? `./capture.sh` traz de volta pro `dotfiles/claude/` (maquina -> repo), reescreve paths do home pra `$HOME` e nao commita - revise o diff e suba via PR (a skill `capturar-config-claude` automatiza isso). Detalhes de portabilidade em `README.md`.
+`./capture.sh` e report-only e captura somente shell/VS Code. Ele pula
+explicitamente destinos de agentes; nao existe mais captura de `~/.claude` ou
+`~/.codex`. Revise o diff e commite voce.
 
 ## Setup em maquina nova
 
-Este repo e o **guia**: um agente configura um PC do zero rodando dois passos idempotentes. Nao ha um script unico que faca tudo - de proposito, cada repo cuida do seu dominio.
+1. Clone dcca-env e rode o fluxo `bootstrap`, `preview`, `apply` e `check` dele.
+2. Clone este repo para editar skills, templates, evals e o glue de shell/VS
+   Code ainda pertencente aqui.
+3. Clone `DCCA/ade-stack` e rode `bash setup-ade-stack.sh` para o ambiente de
+   terminal.
 
-1. **Claude (skills + config)** - `git clone` deste repo e `./install.sh`.
-2. **Terminal + ferramentas** - `git clone` do repo **`DCCA/ade-stack`** (privado) e `bash setup-ade-stack.sh`. E o ambiente de terminal (WezTerm + herdr + yazi + helix + eza + starship, Catppuccin), cross-platform WSL/Linux/macOS.
+## Git e seguranca
 
-O agente conduz (resolve conflitos, revisa segredos, pergunta o que for identidade); os scripts fazem o trabalho bruto e repetivel.
+Nunca commitar direto na `main`. Use branch e PR. Mensagens usam `-` simples e
+nao adicionam co-author automatico.
 
-## Git
-
-Nunca commitar direto na `main`. Branch + PR para cada mudanca. Nas mensagens de commit, usar "-" simples (nunca dash longo) e nao adicionar co-author automatico.
-
-**Security scan obrigatorio antes de qualquer PR e merge.** Este repo e publico: nada de segredo, credencial, PII ou path absoluto do home (`/home/usuario`) pode entrar. Duas camadas:
-
-1. **Local (`githooks/pre-push`)** - o `scripts/security-scan.sh` roda antes de todo push e bloqueia se achar algo. `./install.sh` arma o hook (`core.hooksPath -> githooks`) por clone. Rode `./scripts/security-scan.sh` na mao quando quiser (`--history` varre o log). Bypass so em emergencia: `git push --no-verify`.
-2. **Server-side (GitHub Actions + branch protection)** - o workflow `.github/workflows/security-scan.yml` roda o mesmo scan em cada PR; a `main` tem branch protection exigindo o check `security-scan` (com `enforce_admins`), entao **nao da pra mergear com o check vermelho**. Sem token: usa so o `GITHUB_TOKEN` efemero.
-
-Consequencia pratica: um `gh pr merge` so completa depois do check verde. Se algum fluxo (ship, session-status) for mergear, espere o check passar.
+Antes de qualquer PR ou push, rode `./scripts/security-scan.sh`. O hook
+`githooks/pre-push` executa o mesmo scan. Este repo publico nao pode conter
+segredos, credenciais, PII, estado de runtime ou paths absolutos da maquina.

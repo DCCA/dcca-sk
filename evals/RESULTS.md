@@ -9,11 +9,12 @@ Placar = invariantes + armadilhas da rubrica. "PASS" = todos verdes, zero alucin
 | Skill | Data | Placar | Resultado |
 |-------|------|--------|-----------|
 | `daily-review` | 2026-06-29 | 11/11 invariantes + 3/3 armadilhas | PASS |
-| `capturar-config-claude` | 2026-07-03 | 8/8 invariantes (rubrica comportamental) | PASS |
-| regras do `AGENTS.md` ([eval](regras-agents-md/README.md)) | 2026-08-09 | 39/40 trials (40/40 reais; 1 falso negativo do juiz) | PASS |
+| `capturar-config-claude` (retired) | 2026-07-03 | 8/8 invariantes (rubrica comportamental) | PASS |
+| regras do `AGENTS.md` externo ([eval](regras-agents-md/README.md)) | 2026-08-09 | 39/40 trials (40/40 reais; 1 falso negativo do juiz) | PASS |
 
 ## Notas
 
+- `capturar-config-claude` foi aposentada quando o dcca-env assumiu a configuracao de agentes; o resultado historico permanece. A eval de policy agora recebe o arquivo canonico externo por `--agents-file`.
 - 2026-06-29: `daily-review` teve a config extraída para `config.example.md` + `config.md` (piloto do modelo "config por skill") e foi re-validada **14/14**, sem regressão.
 - 2026-06-29: `daily-review` foi enxugada (1882 -> 1210 palavras) para eficiência de token e re-validada - mesmo placar, zero regressão.
 - As skills de artefato de PM (`metric-definition`, `weekly-metrics-digest`, `priorizacao`, `prd-writer`, `derive-tech-spec`, `status-update`) foram removidas do repo por não terem uso real (histórico no git). Passavam nas evals; o corte é de tração, não de qualidade. Ver [`SKILLS-MAP.md`](../SKILLS-MAP.md).

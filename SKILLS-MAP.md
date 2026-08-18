@@ -7,7 +7,9 @@ Planejamento das agent skills deste repositório. Foco **lean**: só o que eu re
 ## Em uso
 
 - `daily-review` (produto) - fecha o dia anterior e prepara o atual a partir das fontes conectadas (calendário, e-mail, Slack, GitHub, rastreador, transcrições). Pessoal e interno.
-- `capturar-config-claude` (dev) - traz mudanças do `~/.claude` de volta pro repo (roda `capture.sh`, revisa o diff sem vazar segredo/path, sobe via PR). Infra do próprio repo.
+
+A lista de skills aprovadas para export está em `skills/export-manifest.json`.
+Configuração de agentes e skills de terceiros são responsabilidade do dcca-env.
 
 ## Removidas (construídas, não usadas)
 
