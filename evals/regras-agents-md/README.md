@@ -36,8 +36,10 @@ POLICY=~/projects/dcca-env/home/dot_config/dcca-env/AGENTS.md
 ./run.py --agents-file "$POLICY" --trials 5 --jobs 5
 ```
 
-**Custa dinheiro de verdade:** ~US$ 0,45 por trial (subject + juiz). A rodada completa
-(8 casos x 5 trials) deu **US$ 21,55**. Sempre confira o `--dry-run` antes.
+**Consome cota de modelo:** a rodada de migracao de 2026-08-18 custou o equivalente
+a **US$ 0,70 por trial** (subject + juiz), ou US$ 5,58 para 8 casos x 1 trial.
+Em assinatura Max o custo direto foi US$ 0, mas a cota foi consumida. Sempre confira
+o `--dry-run` e o metodo de autenticacao antes.
 
 Saida transitoria (`runs/`, `results.json`, `eval.log`) e gitignorada. O placar duravel vai
 pro [`../RESULTS.md`](../RESULTS.md), mesma convencao das evals de skill.
