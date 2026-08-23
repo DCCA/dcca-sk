@@ -13,10 +13,11 @@ arquivos locais ignorados. Nunca commitar dados reais de uma empresa.
 
 - `dcca-sk` e a fonte de autoria e avaliacao das skills autorais.
 - `dcca-env` e o unico dono da configuracao de runtime de Pi, Claude Code e
-  Codex, dos links de agente e da instalacao de skills de terceiros.
+  Codex, dos links de agente, da instalacao de skills de terceiros e do
+  ambiente de terminal.
 - `dcca-sk` nao captura, instala ou linka configuracao de agentes. Nao ha
   snapshots de agentes nem catalogo de terceiros neste repo.
-- O ambiente de terminal continua no `DCCA/ade-stack`.
+- `ade-stack` e somente um handoff de compatibilidade para `DCCA/dcca-env`.
 
 ## O que e uma skill aqui
 
@@ -58,9 +59,9 @@ Use DCCA/dcca-env para restaurar e configurar o ambiente de agentes.
 
 ## Setup em maquina nova
 
-1. Clone dcca-env e rode o fluxo `bootstrap`, `preview`, `apply` e `check` dele.
+1. Clone dcca-env e rode o fluxo `bootstrap`, `preview`, `apply` e `check` dele
+   para restaurar agentes e ambiente de terminal.
 2. Clone este repo somente para editar skills, templates, evals e documentacao.
-3. Para o ambiente de terminal, clone tambem `DCCA/ade-stack` e rode `bash setup-ade-stack.sh`.
 
 ## Git e seguranca
 

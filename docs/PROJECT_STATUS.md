@@ -17,8 +17,9 @@ mesmo depois da transferencia de ownership para o DCCA/dcca-env.
 - Mantidos skills, templates, evals, manifest, security scan, hook e historico.
 
 **Decision:** dcca-sk e somente modulo autoral e avaliativo de skills. O
-DCCA/dcca-env e a unica fonte para restauracao de runtime e configuracao de
-agentes.
+DCCA/dcca-env e a unica fonte para restauracao de runtime, configuracao de
+agentes e ambiente de terminal. O ade-stack fica somente como handoff de
+compatibilidade.
 
 ---
 

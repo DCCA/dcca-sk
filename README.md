@@ -9,10 +9,11 @@ ou arquivos locais ignorados.
 - **dcca-sk**: escreve, valida e avalia skills autorais. O contrato de
   exportacao esta em [`skills/export-manifest.json`](skills/export-manifest.json);
   hoje exporta apenas `daily-review`.
-- **dcca-env**: restaura configuracao de agentes, instala skills de terceiros,
-  plugins, CLIs e links de runtime. dcca-sk nao e um segundo escritor desses
-  destinos.
-- **ade-stack**: continua dono do ambiente de terminal.
+- **dcca-env**: restaura configuracao de agentes e ambiente de terminal,
+  instala skills de terceiros, plugins, CLIs e links de runtime. dcca-sk nao
+  e um segundo escritor desses destinos.
+- **ade-stack**: permanece somente como handoff de compatibilidade para
+  dcca-env.
 
 Credenciais, autenticacao, sessoes, historico, caches, estado gerado e backups
 nao pertencem a este repositorio.
@@ -60,10 +61,9 @@ manifest e rode `./install.sh` para validar frontmatter e o contrato.
 
 ## Setup em maquina nova
 
-1. Clone DCCA/dcca-env e rode o fluxo de restore documentado nele para o ambiente de agentes.
+1. Clone DCCA/dcca-env e rode o fluxo de restore documentado nele para agentes
+   e ambiente de terminal.
 2. Clone este repo para editar somente skills, templates, evals e documentacao.
-3. Para o ambiente de terminal, clone tambem `DCCA/ade-stack` e rode seu
-   `setup-ade-stack.sh`.
 
 ## Seguranca
 

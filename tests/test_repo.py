@@ -68,6 +68,12 @@ class ExportContractTests(unittest.TestCase):
 
 
 class BoundaryTests(unittest.TestCase):
+    def test_current_docs_route_terminal_restore_to_dcca_env(self):
+        for path in (ROOT / "README.md", ROOT / "CLAUDE.md"):
+            text = path.read_text(encoding="utf-8")
+            self.assertIn("dcca-env", text)
+            self.assertNotIn("setup-ade-stack.sh", text)
+
     def test_install_only_changes_clone_git_config(self):
         with tempfile.TemporaryDirectory() as temp:
             base = Path(temp)
