@@ -1,23 +1,22 @@
 # Spec: config layer (retired)
 
-**Status:** retired on 2026-08-17
+**Status:** retired on 2026-08-17 and fully removed from dcca-sk
 
-This historical slice introduced the manifest-driven config copier. Its Claude
-and Codex destinations were removed when agent runtime ownership moved to
-`dcca-env`.
+This historical slice introduced the manifest-driven config copier. The
+runtime ownership was later moved to `DCCA/dcca-env`, and the active copier,
+manifest, shell glue and VS Code seed files were removed from this repository.
 
 ## Current ownership
 
-`dcca-sk` keeps only the rows in [`dotfiles/manifest`](../../dotfiles/manifest):
+`dcca-sk` is a skills-only authored module. It does not own configuration
+rows, runtime destinations, agent links, shell glue, VS Code settings, capture
+flows, credentials, histories, sessions, caches or generated state.
 
-- shell glue under `~/.config/dcca-sk`;
-- VS Code settings and extension seed data.
+`install.sh` remains only as a validation compatibility wrapper. It may set
+`core.hooksPath` in this clone's local Git config so the pre-push security hook
+can run. `capture.sh` is a non-mutating deprecation handoff and does not copy
+live state anywhere.
 
-`install.sh` and `capture.sh` continue to serve those rows. They do not read or
-write Claude, Codex, Pi, agent links, credentials, histories, sessions, caches,
-or generated runtime state. The dcca-env restore flow is the only writer for
-agent configuration.
-
-The old `claude`, `codex`, backup, and home-normalization behavior is no longer
-part of this repo. Keep this document as provenance only; do not add new agent
-rows here.
+Use the DCCA/dcca-env restore flow for agent configuration and runtime state.
+Keep this document as historical provenance only; do not add new configuration
+ownership here.

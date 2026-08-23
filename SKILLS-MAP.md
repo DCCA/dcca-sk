@@ -1,8 +1,8 @@
 # Mapa de Skills
 
-Planejamento das agent skills deste repositório. Foco **lean**: só o que eu realmente uso fica instalado; o resto é ideia parada até virar recorrente.
+Planejamento das agent skills deste repositório. Foco **lean**: só o que eu realmente uso fica publicado; o resto é ideia parada até virar recorrente.
 
-**Princípio agnóstico a empresa:** nenhuma skill carrega configuração final (nomes, canais, produtos, métricas, ferramentas). O método/estrutura fica fixo; só a calibração, o glossário e os destinos viram config. Assim as skills são portáteis entre empregos.
+**Princípio agnóstico a empresa:** nenhuma skill carrega configuração final (nomes, canais, produtos, métricas, ferramentas). O método e a estrutura ficam fixos; a configuração real pertence ao destino administrado pelo dcca-env. Assim as skills são portáteis entre empregos.
 
 ## Em uso
 

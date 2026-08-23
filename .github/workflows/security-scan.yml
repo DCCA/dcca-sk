@@ -16,5 +16,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0   # historico completo para o --history varrer o log
+      - name: Validate authored-skill export
+        run: python3 scripts/check-export.py
       - name: Run security scan (tracked files + history)
         run: bash scripts/security-scan.sh --history

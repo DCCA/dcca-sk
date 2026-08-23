@@ -59,7 +59,7 @@ def run_subject(case, trial):
         cwd=work, capture_output=True, text=True, timeout=600,
     )
     if proc.returncode != 0:
-        return None, None, 0.0, f"subject exited {proc.returncode}: {proc.stderr[:200]}"
+        return None, None, "", 0.0, f"subject exited {proc.returncode}: {proc.stderr[:200]}"
 
     data = json.loads(proc.stdout)
     cost = data.get("total_cost_usd", 0.0)

@@ -4,7 +4,29 @@ Logbook do repositório. Entradas em ordem reversa (mais recente no topo). Cada 
 
 ---
 
-## 2026-08-17 - dcca-sk vira fonte de autoria e export
+## 2026-08-19 - consolidacao skills-only
+
+**Where we were:** O repo ainda mantinha o restante do runtime de shell e VS Code
+mesmo depois da transferencia de ownership para o DCCA/dcca-env.
+
+**What we did:**
+- Removidos `dotfiles/` e todos os caminhos ativos de instalacao e captura.
+- Reduzido `install.sh` a validacao do export e configuracao opcional do hook
+  somente no Git local deste clone.
+- Mantido `capture.sh` como handoff depreciado, estritamente nao-mutante.
+- Mantidos skills, templates, evals, manifest, security scan, hook e historico.
+
+**Decision:** dcca-sk e somente modulo autoral e avaliativo de skills. O
+DCCA/dcca-env e a unica fonte para restauracao de runtime, configuracao de
+agentes e ambiente de terminal. O ade-stack fica somente como handoff de
+compatibilidade.
+
+---
+
+## 2026-08-17 - dcca-sk vira fonte de autoria e export (superseded)
+
+**Status:** Registro historico. A camada residual de shell e VS Code descrita
+abaixo foi removida na consolidacao skills-only de 2026-08-19.
 
 **Where we were:** O repo tambem mantinha snapshots de Claude/Codex, captura de
 config e um registry flutuante de terceiros, duplicando o novo dcca-env.
@@ -17,8 +39,9 @@ config e um registry flutuante de terceiros, duplicando o novo dcca-env.
 - Criado `skills/export-manifest.json`, com `daily-review` como unica skill
   autoral aprovada, e `scripts/check-export.py` para validar manifesto,
   frontmatter e cobertura.
-- `install.sh` continua validando skills e cuidando apenas de shell, VS Code e
-  hook Git. `capture.sh` agora captura apenas shell/VS Code e informa o limite.
+- Naquele momento, `install.sh` ainda validava skills e cuidava de shell, VS
+  Code e hook Git. `capture.sh` ainda capturava shell/VS Code e informava o
+  limite. Esses caminhos foram removidos depois.
 
 **Decision:** Um writer por destino. O dcca-sk publica skills autorais; o
 dcca-env restaura runtime e terceiros; o ade-stack continua dono do terminal.

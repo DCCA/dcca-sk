@@ -11,11 +11,32 @@ from pathlib import Path
 
 NAME = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 FRONTMATTER = re.compile(r"^---\s*\n(.*?)\n---(?:\s*\n|$)", re.DOTALL)
+FALLBACK_FIELD = re.compile(r"^(name|description):[ \t]*(.*?)\s*$")
 
 
 def fail(message: str) -> None:
     print(f"export manifest invalido: {message}", file=sys.stderr)
     raise SystemExit(1)
+
+
+def parse_fallback_frontmatter(frontmatter: str, expected_name: str) -> None:
+    """Validate the small frontmatter subset needed when PyYAML is unavailable."""
+    fields: dict[str, str] = {}
+    for line in frontmatter.splitlines():
+        if not line.strip() or line.lstrip().startswith("#"):
+            continue
+        match = FALLBACK_FIELD.fullmatch(line)
+        if not match or match.group(1) in fields:
+            continue
+        value = match.group(2).strip()
+        if len(value) >= 2 and value[0] == value[-1] and value[0] in "'\\\"":
+            value = value[1:-1]
+        fields[match.group(1)] = value
+
+    if fields.get("name") != expected_name:
+        fail(f"frontmatter name deve ser exatamente {expected_name!r}")
+    if not fields.get("description", "").strip():
+        fail("frontmatter description deve ser nao vazia")
 
 
 def main() -> None:
@@ -65,10 +86,7 @@ def main() -> None:
         try:
             import yaml
         except ImportError:
-            if not re.search(r"^name:\s*[^\s#]+", frontmatter, re.MULTILINE):
-                fail(f"{relative}/SKILL.md: falta name no frontmatter")
-            if not re.search(r"^description:\s*.+", frontmatter, re.MULTILINE):
-                fail(f"{relative}/SKILL.md: falta description no frontmatter")
+            parse_fallback_frontmatter(frontmatter, name)
         else:
             try:
                 parsed = yaml.safe_load(frontmatter)
