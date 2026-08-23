@@ -28,11 +28,14 @@ def load_eval_runner():
 def tree_snapshot(path: Path) -> dict[str, bytes]:
     if not path.exists():
         return {}
-    return {
-        str(item.relative_to(path)): item.read_bytes()
-        for item in path.rglob("*")
-        if item.is_file()
-    }
+    snapshot: dict[str, bytes] = {}
+    for item in path.rglob("*"):
+        relative = str(item.relative_to(path))
+        if item.is_dir():
+            snapshot[f"{relative}/"] = b""
+        elif item.is_file():
+            snapshot[relative] = item.read_bytes()
+    return snapshot
 
 
 class ExportContractTests(unittest.TestCase):
