@@ -11,14 +11,12 @@ arquivos locais ignorados. Nunca commitar dados reais de uma empresa.
 
 ## Ownership
 
-- `dcca-sk` e a fonte de autoria e avaliacao das skills. O export explicito esta
-  em `skills/export-manifest.json`.
+- `dcca-sk` e a fonte de autoria e avaliacao das skills autorais.
 - `dcca-env` e o unico dono da configuracao de runtime de Pi, Claude Code e
   Codex, dos links de agente e da instalacao de skills de terceiros.
 - `dcca-sk` nao captura, instala ou linka configuracao de agentes. Nao ha
   snapshots de agentes nem catalogo de terceiros neste repo.
-- O glue de shell e os arquivos seed do VS Code continuam neste repo. O
-  ambiente de terminal continua no `DCCA/ade-stack`.
+- O ambiente de terminal continua no `DCCA/ade-stack`.
 
 ## O que e uma skill aqui
 
@@ -45,28 +43,24 @@ a primeira coisa do arquivo e a description fica entre aspas simples no YAML.
 Toda skill nasce com pelo menos um cenario e uma rubrica em seu diretorio
 evals. Use `evals/empresa-ficticia/acme.md` e consulte `evals/README.md` para o
 fluxo aplicador -> avaliador. Resultados duraveis ficam em `evals/RESULTS.md`.
-A policy de agentes pertence ao dcca-env; o harness e os casos de eval continuam neste repo e recebem o arquivo canonico por argumento.
+A policy de agentes pertence ao dcca-env; o harness e os casos de eval continuam
+neste repo e recebem o arquivo canonico por argumento.
 
-## Instalar e capturar
+## Validar e instalar
 
-`./install.sh` valida o frontmatter e a estrutura das skills listadas em
-`skills/export-manifest.json`, sem criar links de runtime. Tambem instala os
-arquivos ainda pertencentes ao repo conforme `dotfiles/manifest`: glue de shell
-e arquivos seed do VS Code. Por fim, arma o hook de seguranca do Git. O script
-imprime uma mensagem clara de que agentes, terceiros e links de runtime sao
-dominio do dcca-env.
+`./install.sh` e um wrapper de compatibilidade que valida apenas o contrato em
+`skills/export-manifest.json`. Ele pode configurar `core.hooksPath` somente no
+clone atual; nao escreve em HOME nem em destinos externos.
 
-`./capture.sh` e report-only e captura somente shell/VS Code. Ele pula
-explicitamente destinos de agentes; nao existe mais captura de `~/.claude` ou
-`~/.codex`. Revise o diff e commite voce.
+`./capture.sh` esta depreciado e serve somente como handoff. E estritamente
+nao-mutante: nao captura estado vivo e nao copia arquivos para o repositorio.
+Use DCCA/dcca-env para restaurar e configurar o ambiente de agentes.
 
 ## Setup em maquina nova
 
 1. Clone dcca-env e rode o fluxo `bootstrap`, `preview`, `apply` e `check` dele.
-2. Clone este repo para editar skills, templates, evals e o glue de shell/VS
-   Code ainda pertencente aqui.
-3. Clone `DCCA/ade-stack` e rode `bash setup-ade-stack.sh` para o ambiente de
-   terminal.
+2. Clone este repo somente para editar skills, templates, evals e documentacao.
+3. Para o ambiente de terminal, clone tambem `DCCA/ade-stack` e rode `bash setup-ade-stack.sh`.
 
 ## Git e seguranca
 
