@@ -1,0 +1,11 @@
+Source: X post by @t3dotgg
+URL: https://x.com/theo/status/2113424203345265053
+Post ID: 2113424203345265053
+Date: October 2026
+Type: X Article (long-form)
+Title: "What is a 'harness'?"
+
+Fetch instructions:
+1. Open https://x.com/theo/status/2113424203345265053
+2. Read the full article (Article tab)
+3. Download diagrams for image analysis if needed

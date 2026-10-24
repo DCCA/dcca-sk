@@ -1,11 +1,11 @@
 ---
 name: unslop
-description: 'Use before publishing or delivering any written text (digests, signal cards, summaries, docs, idea write-ups) to strip AI-writing tells; applies to English and Brazilian Portuguese.'
+description: 'Use before publishing or delivering any written text (summaries, docs, newsletters, write-ups) to strip AI-writing tells; applies to English and Brazilian Portuguese.'
 ---
 
 # Unslop
 
-Adapted from pstack's `unslop` skill (github.com/cursor/plugins, pstack/skills/unslop, commit 190d287, MIT License, (c) 2026 Lauren Tan).
+Adapted from pstack's `unslop` skill (github.com/cursor/plugins, pstack/skills/unslop, commit 190d287). See THIRD_PARTY_NOTICES.md in the repository root for the full MIT License text.
 
 Edit text to remove AI patterns. Scan for the patterns below, then rewrite. Preserve meaning, facts, numbers, links, and the intended tone. For Brazilian Portuguese text, apply the same rules with the natural pt-BR equivalents (for example "além disso", "crucial", "fundamental", "no cenário atual", "vale ressaltar que").
 
@@ -66,4 +66,4 @@ Rule numbers are stable ids. A removed rule leaves a gap.
 
 1. Read the draft once and mark every hit by rule number.
 2. Rewrite the marked sentences. Never change facts, quotes, numbers, names, or URLs.
-3. Re-read the result once for meaning and tone, and keep any required format (JSON fields, card schema, length limits).
+3. Re-read the result once for meaning and tone, and keep any required format (structured fields, schemas, length limits).

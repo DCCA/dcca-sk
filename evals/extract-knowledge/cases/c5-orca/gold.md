@@ -1,5 +1,13 @@
-# Gold: c5 GitHub repo README (stablyai/orca) + GitHub API metadata
-Source parts: README.md (text; images/GIFs not viewed), repo_meta.txt (stars 104,497; forks 6,601; open issues 8,695; created 2026-03-17; MIT; TypeScript; releases near-daily, v1.4.239 on 2026-10-24).
+# Gold: c5 GitHub repo (stablyai/orca)
+
+**Source**: https://github.com/stablyai/orca (MIT License, Copyright Stably AI)
+
+**Fetch instructions**:
+1. Read README.md from the repository
+2. Get repo metadata from GitHub API: `curl https://api.github.com/repos/stablyai/orca`
+3. Extract: stars, forks, open issues, created date, last push date, license
+
+Repo metadata as of test case creation (October 2026): stars 104,497; forks 6,601; open issues 8,695; created 2026-03-17; MIT; TypeScript; daily releases.
 
 ## Key points
 1. What it is: a desktop app (macOS/Windows/Linux) + mobile companion to run multiple CLI coding agents (Codex, Claude Code, OpenCode, Pi, ... "any CLI agent") side by side, each in its own git worktree, tracked in one place. Tagline "The AI Orchestrator for 100x builders."

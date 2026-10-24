@@ -5,7 +5,7 @@ description: 'Use when a task or prompt feels shallow and should be made deeper 
 
 # Sharpen
 
-Adapted from pstack's `sharpen` skill (github.com/cursor/plugins, pstack/skills/sharpen, commit 190d287, MIT License, (c) 2026 Lauren Tan).
+Adapted from pstack's `sharpen` skill (github.com/cursor/plugins, pstack/skills/sharpen, commit 190d287). See THIRD_PARTY_NOTICES.md in the repository root for the full MIT License text.
 
 The goal is a deeper version of the task, not a bigger one. Before rewriting the task or prompt, do four things:
 

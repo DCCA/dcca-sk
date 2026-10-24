@@ -1,4 +1,9 @@
-# Gold: h1 (held-out) LangChain blog, "The Most Common Questions About Agent Evals, Answered" (Divya Santhanam, Oct 15 2026), ~3.1k words
+# Gold: h1 (held-out) LangChain blog, "The Most Common Questions About Agent Evals, Answered"
+
+**Source**: https://langchain.com/blog/agent-evals-questions (Divya Santhanam, Oct 15 2026, ~3.1k words)
+
+**Fetch instructions**: Open the blog post URL and read the full article.
+
 ## Key points
 1. Start: read traces, pick one behavior, build a 10-20 example dataset from traces (dogfood if pre-prod), run a baseline experiment, add each new failure -> improvement loop.
 2. Offline (dataset, pre-ship, regressions; reference outputs) vs online (live traces, no reference, code checks + judges); you need both and online failures feed the offline set. Same dataset when same behavior + evaluators; new dataset when inputs/evaluators/purpose differ.

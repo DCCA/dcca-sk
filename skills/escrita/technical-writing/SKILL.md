@@ -5,7 +5,7 @@ description: 'Use when writing or reviewing docs, PRDs, RFCs, specs, READMEs, PR
 
 # Technical writing
 
-Adapted from pstack's `technical-writing` skill (github.com/cursor/plugins, pstack/skills/technical-writing, commit 190d287, MIT License, (c) 2026 Lauren Tan).
+Adapted from pstack's `technical-writing` skill (github.com/cursor/plugins, pstack/skills/technical-writing, commit 190d287). See THIRD_PARTY_NOTICES.md in the repository root for the full MIT License text.
 
 Write so a tired reader understands on the first read. Apply all four layers.
 
@@ -48,7 +48,7 @@ Don't mix modes. Split and link instead. A PRD or spec usually pairs an explanat
 ## Write sentences to the reader (Google developer style)
 
 - Talk to the reader as "you", in the present tense.
-- Say who does what: "the engine checks", not "is checked".
+- Say who does what: "the compiler checks", not "is checked".
 - Write instructions as commands. State facts plainly. Never "should be done".
 - Put the condition before the instruction: "To delete the document, click Delete."
 - Put the common case first, exceptions after.

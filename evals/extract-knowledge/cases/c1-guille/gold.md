@@ -1,6 +1,16 @@
 # Gold: c1 X post with video (public figure sharing a VC firm clip)
 
-Source: X post with ~2-min video clip. Post text in fx.json, video transcript in transcript.txt.
+**Source**: X post with ~2-min video clip at https://x.com/user/status/[id]
+
+**Fetch instructions**: 
+1. Get post JSON from `curl https://api.fxtwitter.com/<user>/status/<id>` (save as fx.json)
+2. Download video from the media URL in the JSON
+3. Transcribe with Whisper: `ffmpeg -i video.mp4 -ar 16000 -ac 1 -f f32le audio.raw && whisper audio.raw`
+
+**Key quotes from transcript** (for gold validation):
+- "the gap between what early adopters / AI-native early-stage startups understand AI can do and what typical incumbents understand is as wide as I've ever seen in my career"
+- "a lot of industries will be up for grabs"
+- Mentions "superpowers" from AI tools leading to "more technically intensive product plans"
 
 ## Key points (a careful expert would want)
 

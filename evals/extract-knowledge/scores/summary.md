@@ -1,8 +1,8 @@
-# Final scores summary
+# Eval scores summary
 
-**Note**: This eval set originally included 5 tuning cases plus 1 held-out case. Two cases (c2 and c3) contained proprietary company information and were excluded from this public repository. The scores below reflect results from the complete original eval set.
+Scores were computed on a larger private eval set that included the cases in this repository plus 2 non-redistributable cases.
 
-## Results on available cases (c1, c4, c5, h1)
+## Results on available public cases (c1, c4, c5, h1)
 
 | Case | F | C | A | K | P | L | V | N | Total | Hard fail |
 |---|---|---|---|---|---|---|---|---|---|---|
@@ -11,7 +11,9 @@
 | c5 GitHub README | 2 | 2 | 2 | 2 | 1 | 2 | 2 | 2 | 15 | no |
 | **h1 (held-out)** LangChain blog | 2 | 2 | 2 | 2 | 2 | 2 | 2 | 2 | 16 | no |
 
-## Evolution across versions (full original set, 5 cases)
+## Evolution across versions
+
+Scores computed on the full 5-case tuning set plus held-out case:
 
 - **v1 mean:** 10.6/16 with 1 hard fail (fabricated timestamp)
 - **v2 (first revision) mean:** 13.4/16 with 0 hard fails

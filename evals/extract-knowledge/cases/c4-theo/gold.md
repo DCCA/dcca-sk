@@ -1,5 +1,10 @@
 # Gold: c4 X Article by Theo (t3.gg), "What is a 'harness'?" (~1.4k words + 4 diagrams)
-Source parts: post (link only), article body in fx.json `article`, diagrams (img/1,2,3,5).
+
+**Source**: https://x.com/theo/status/2113424203345265053
+
+**Fetch instructions**: Open the X post URL and read the full long-form article (the "Article" tab on X). Download diagrams if analyzing images.
+
+Source parts: post, article body, diagrams.
 
 ## Key points
 1. Definition: an LLM only emits text; a harness = tools + tool-call syntax + parser that runs code + returning results to the LLM + a tool list with descriptions.

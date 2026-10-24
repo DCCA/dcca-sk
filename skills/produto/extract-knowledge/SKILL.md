@@ -12,7 +12,7 @@ Goal: in under 2 minutes the reader gets the central message and the few ideas t
 List the parts before reading: post text, quoted post, thread, long-form article, video, images, linked original, metadata. Then read each one in full. Never summarize from the post text alone.
 
 - **X post:** `curl https://api.fxtwitter.com/<user>/status/<id>`. Read `text`, `article` (long-form: its `content.blocks` plus `media_entities` images), `quote`, same-author thread replies, and `media`. Video: download the mp4 from `media.all[].formats`, run `ffmpeg -i in.mp4 -ar 16000 -ac 1 -f f32le out.raw`, and transcribe with faster-whisper (load the raw file with numpy). Grab 1-2 frames (`ffmpeg -ss <t> -frames:v 1`) to see who is speaking and the show or logo. Look at every image and diagram.
-- **Web article:** WebFetch. On a 403 or paywall, try `https://r.jina.ai/<url>`. Record where the readable part stops.
+- **Web article:** WebFetch. On a blocked fetch, try a reader proxy such as `https://r.jina.ai/<url>`; never bypass paywalls. Mark paywalled parts as not read.
 - **YouTube / podcast:** transcript (youtube-transcript-api, or download the audio and transcribe). Transcribe long episodes in full; do not sample. Auto-captions mangle names, so check them against the title, description, or show notes.
 - **PDF:** `pdftotext`. **GitHub repo:** README, main docs, and repo metadata (`api.github.com/repos/<owner>/<repo>`: stars, age, open issues, last push). Label metadata as metadata.
 - If the post links an original (the full interview, the paper), open it when it could change the meaning. If you don't open it, name it.
@@ -59,5 +59,5 @@ Then run the unslop skill. Keep quotes, numbers, and names exactly as they are.
 
 - Never invent quotes, numbers, names, timestamps, or claims.
 - Write in the reader's language. Keep quotes in the original language, with a translation if needed.
-- If the reader asks to save the extraction (desk, notes, signal card), use it as the input instead of re-reading the source.
+- If the reader asks to save the extraction to their notes or knowledge base, use it as the input instead of re-reading the source.
 - The eval set used to tune this skill lives in the evals/extract-knowledge/ directory of this repository (README explains how to rerun it); rerun it after any change to this skill.
