@@ -39,5 +39,5 @@ Scale to the source: a tweet gets ~6 short lines; a long essay or a 1-hour podca
 ## Rules
 - Never invent quotes, numbers, names, or claims. Flag garbled transcript passages instead of guessing.
 - Write in the reader's language; keep quotes in the original language, with a translation if needed.
-- Run the unslop skill on the output before sending.
+- Strip AI-writing tells before delivering: remove chatbot phrases, excessive hedging, AI vocabulary patterns, and mannered prose.
 - If the reader asks to save it to their notes or knowledge base, reuse this extraction as the input rather than re-reading the source.
