@@ -8,18 +8,6 @@
     {
       "name": "extract-knowledge",
       "path": "skills/produto/extract-knowledge"
-    },
-    {
-      "name": "sharpen",
-      "path": "skills/produto/sharpen"
-    },
-    {
-      "name": "technical-writing",
-      "path": "skills/escrita/technical-writing"
-    },
-    {
-      "name": "unslop",
-      "path": "skills/escrita/unslop"
     }
   ]
 }

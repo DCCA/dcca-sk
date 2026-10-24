@@ -51,9 +51,12 @@ fluxo de restauracao e configuracao de runtime.
 
 ## Skills autorais
 
+Este repositório contém apenas skills de autoria do owner. Skills de terceiros são instaladas de suas fontes (por exemplo, via dcca-env).
+
 | Skill | Categoria | O que faz |
 |-------|-----------|-----------|
 | `daily-review` | produto | Fecha o dia anterior e prepara o dia atual a partir das fontes conectadas. |
+| `extract-knowledge` | produto | Extrai conhecimento de links (X, artigos, vídeos, repos) com atribuição fiel e leitura crítica. |
 
 Para criar uma skill, comece em [`templates/SKILL.md`](templates/SKILL.md),
 salve-a em `skills/<categoria>/<nome-kebab>/SKILL.md`, adicione-a ao export

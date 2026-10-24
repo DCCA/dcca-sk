@@ -53,7 +53,7 @@ Check the draft against the saved source files, not against memory:
 4. **Coverage:** every noted key point is in the draft, and someone who reads only the extraction can answer every reader question.
 5. **Budget:** cut to the length budget.
 
-Then run the unslop skill. Keep quotes, numbers, and names exactly as they are.
+Then strip AI-writing tells before delivering: remove chatbot phrases, excessive hedging, AI vocabulary patterns (e.g., "delve", "leverage", "showcase"), and mannered prose. Keep quotes, numbers, and names exactly as they are.
 
 ## Rules
 
