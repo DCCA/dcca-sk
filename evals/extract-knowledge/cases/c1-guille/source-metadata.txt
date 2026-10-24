@@ -1,0 +1,13 @@
+Source: X post with video
+URL: [to be fetched]
+Post ID: [to be fetched]
+Date: [to be fetched]
+Author: [public figure]
+
+Fetch instructions:
+1. Identify the X post URL for this case
+2. Get post JSON: curl https://api.fxtwitter.com/<user>/status/<id>
+3. Extract: tweet ID, URL, author handle, post date, short post text
+4. Download video from media URL
+5. Transcribe: ffmpeg -i video.mp4 -ar 16000 -ac 1 -f f32le audio.raw
+6. Run Whisper on audio.raw

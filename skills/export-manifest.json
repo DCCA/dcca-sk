@@ -4,6 +4,10 @@
     {
       "name": "daily-review",
       "path": "skills/produto/daily-review"
+    },
+    {
+      "name": "extract-knowledge",
+      "path": "skills/produto/extract-knowledge"
     }
   ]
 }
